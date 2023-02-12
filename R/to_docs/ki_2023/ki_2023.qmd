@@ -1,0 +1,273 @@
+---
+title: "KI im Jahre 2023"
+subtitle: "Was ist das, was kann es, was kann es nicht?"
+author: "Prof. Oliver Dürr und Prof. Georg Umlauf"
+format:
+  revealjs:
+    embed-resources: true 
+    theme: [default, ../shared_stuff/oliver_slides.scss]
+    slide-number: true
+    #smaller: true  
+    scrollable: true
+    # Geht nicht zum html exportieren 
+    #chalkboard: 
+    #  buttons: false
+    preview-links: auto
+    controls-layout: edges
+    logo: ../shared_stuff/images/ios.png
+    footer: <https://www.ios.htwg-konstanz.de/>
+---
+
+## Überblick
+
+-   Einordnung
+
+    -   Deep Learning vs. Künstliche Intelligenz
+
+-   Prinzipielle Funktionsweise von neuronalen Netzen
+
+    -   Einfache NN
+
+        -   Blutdruck aus Alter, Wetter
+
+    -   Komplexere NN (Prinzip)
+
+    -   Training von NN
+
+-   Grenzen der KI / Prinzipbedingte Schwächen
+
+::: notes
+KI ist so eine wichtige technology, das es wichtig ist eine ungefähre Idee der Funktionswqeise zu haben. ChatGPT wird einen ziemlichen Impact haben.
+:::
+
+# Vorbemerkung
+
+## Der kluge Hans
+
+![](images/image14.jpg){width="682"}
+
+::: aside
+Kluger Hans um 1895; † nach 1916
+:::
+
+::: notes
+Speaker notes go here.
+:::
+
+## Deep Learning für Tumor Erkennung
+
+![](images/tissue.png)
+
+DL so gut wie PathologInnen ...
+
+::: footer
+Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Soltermann, Oliver Dürr, Beate Sick Deep Learning for Classification of Non-Small Cell Lung Cancer histologic subtypes. Poster ALMD 2019
+:::
+
+## Tauben in der Tumorerkennung
+
+![](images/image-1412603641.png)
+
+10 Tauben so gut wie ein Pathologe: [youtube](https://www.youtube.com/watch?v=NsV6S8EsC0E)
+
+## Starke vs. schwache KI {.smaller}
+
+-   Starke / allgemeine KI (general AI)
+
+    -   Allgemeine Intelligenz
+
+    -   Bewusstsein
+
+    -   "Science Fiction?"
+
+-   Schwache KI (im folgenden nur KI)
+
+    -   Konkreten Anwendungsproblemen
+
+    -   Leistungen in den letzten 50 Jahren
+
+        -   Taschenrechner, Schach
+
+    -   Enorme Steigerungen in den letzten 10 Jahren (Deep Learning)
+
+        -   Bilderkennung, GO, Übersetzungen, ChatGPT
+
+
+##### Enorme Fortschritte in KI, aber nicht der starken
+
+## KI (AI), Machine Learning, Deep Learning
+
+![](images/image-1420173548.png)
+
+Deep Learning started the AI Boom from \~ 2010 on
+
+::: footer
+Slide credit: <https://www.datasciencecentral.com/profiles/blogs/artificial-intelligence-vs-machine-learning-vs-deep-learning>
+:::
+
+## Anwendungen
+
+![](images/image-260562600.png)
+
+## manipulateWidget
+
+## manipulateWidget
+
+```{r}
+library(manipulateWidget) 
+
+myPlotFun = function(country){
+  x <- c(1:100)
+  random_y <- rnorm(100, mean = 0)
+  data <- data.frame(x, random_y)
+
+  fig <- plot_ly(data, x = ~x, y = ~random_y, type = 'scatter', mode = 'lines')
+
+  return(fig)
+}
+
+
+manipulateWidget(
+  myPlotFun(country), 
+  country = mwSelect(c("BE", "DE", "ES", "FR"))
+)
+```
+
+## leaflet
+
+```{r}
+library(leaflet)
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
+```
+## Interactivity
+
+```{ojs}
+//| panel: sidebar
+
+viewof bill_length_min = Inputs.range(
+  [32, 50], 
+  {value: 35, step: 1, label: "Bill length (min):"}
+)
+viewof islands = Inputs.checkbox(
+  ["Torgersen", "Biscoe", "Dream"], 
+  { value: ["Torgersen", "Biscoe"], 
+    label: "Islands:"
+  }
+)
+```
+
+::: {.panel-tabset}
+
+## Plot
+
+```{ojs}
+Plot.rectY(filtered, 
+  Plot.binX(
+    {y: "count"}, 
+    {x: "body_mass_g", fill: "species", thresholds: 20}
+  ))
+  .plot({
+    facet: {
+      data: filtered,
+      x: "sex",
+      y: "species",
+      marginRight: 80
+    },
+    marks: [
+      Plot.frame(),
+    ]
+  }
+)
+```
+
+## Data
+
+```{ojs}
+Inputs.table(filtered)
+```
+
+:::
+
+
+
+## Anwendungen
+
+```{r}
+#| echo: true
+#| fig-width: 10
+#| fig-height: 4.5
+library(ggplot2)
+ggplot(mtcars, aes(hp, mpg, color = am)) +
+  geom_point() +
+  geom_smooth(formula = y ~ x, method = "loess")
+
+```
+
+## LaTeX Equations
+
+[MathJax](https://www.mathjax.org/) rendering of equations to HTML
+
+::: columns
+::: {.column width="40%"}
+``` tex
+\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+```
+:::
+
+::: {.column width="60%"}
+```{=tex}
+\begin{gather*}
+a_1=b_1+c_1\\
+a_2=b_2+c_2-d_2+e_2
+\end{gather*}
+```
+```{=tex}
+\begin{align}
+a_{11}& =b_{11}&
+  a_{12}& =b_{12}\\
+a_{21}& =b_{21}&
+  a_{22}& =b_{22}+c_{22}
+\end{align}
+```
+:::
+:::
+
+::: footer
+Learn more: [LaTeX Equations](https://quarto.org/docs/authoring/markdown-basics.html#equations)
+:::
+
+## Column Layout {.smaller}
+
+Arrange content into columns of varying widths:
+
+::: columns
+::: {.column width="35%"}
+#### Motor Trend Car Road Tests
+
+The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles.
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="62%"}
+```{r}
+knitr::kable(head(mtcars)[,c("mpg",	"cyl", "disp", "hp", "wt")])
+```
+:::
+:::
+
+::: footer
+Learn more: [Multiple Columns](https://quarto.org/docs/presentations/revealjs/#multiple-columns)
+:::

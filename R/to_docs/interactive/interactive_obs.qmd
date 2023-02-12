@@ -135,13 +135,21 @@ SummaryTable(table)
 :::
 :::
 
+## The Data
+```{ojs}
+//| panel: fill
+Plot.plot({
+  marks: [
+    Plot.dot(dat, {x: "x", y: "y"}),
+  ]})
+```
+
+
+
+
 ## Plot
 
 ```{ojs}
-viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
-viewof w = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
-
-
 Plot.plot({
   marks: [
     Plot.dot(dat, {x: "x", y: "y"}),
@@ -156,3 +164,35 @@ function curve(template){
   return xvals.map((x, i) => ({x, y: yhat[i]})); //Thanks ChatGPT
 }
 ```
+
+```{ojs}
+//| panel: sidebar
+viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+viewof w = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+
+draw(network, width, height, thickness)
+import {draw} from "@oduerr/visualizing-neural-networks"
+scale = 0.8
+width = 600*scale
+nodes_rad = 40*scale
+fs = 40*scale
+off_x = -15*scale
+height = 400*scale
+thickness = 20*scale
+network = ({
+  nodes: [
+    {id: '1-1', nr: 1, layer: 1, label: 'X'}, {id: '1-2', nr: 2, layer: 1, label: '1'},
+    {id: '2-1', nr: 1, layer: 2, label: 'Y'}
+  ],
+  edges: [
+    {s: '1-1', t: '2-1', w: w},
+    {s: '1-2', t: '2-1', w: b/10}
+  ]
+})
+
+```
+
+
+
+
+
