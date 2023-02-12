@@ -1,0 +1,158 @@
+---
+title: "Interactive Presentation"
+subtitle: "Using Observable"
+author: "Oliver"
+format:
+  revealjs:
+    embed-resources: true 
+    theme: [default, ../shared_stuff/oliver_slides.scss]
+    slide-number: true
+    #smaller: true  
+    scrollable: true
+    # Geht nicht zum html exportieren 
+    #chalkboard: 
+    #  buttons: false
+    preview-links: auto
+    controls-layout: edges
+    logo: ../shared_stuff/images/ios.png
+    footer: <https://www.ios.htwg-konstanz.de/>
+---
+
+## Interactive Visualizations
+
+My summary from 11/Feb/2023
+
+-   Interactive visualizations are best made with html.
+
+-   Presentation Tools
+
+    -   Powerpoint and google-docs do not consistently allow to embed HTML
+
+    -   Quatro
+
+        -   Can an embed HTML nicely
+
+        -   Nice presentation with <https://revealjs.com> (pdf and standallone html OK)
+
+    -   Other
+
+        -   <https://slides.com/> (not checked yet)
+
+-   Interactivity
+
+    -   **html_widgets** (not all widgets work)
+
+    -   **Shiny** (needs server)
+
+    -   **Observable.js** (nice interactive alternative) not yet 100% sure what happens
+
+::: notes
+Speaker notes go here.
+:::
+
+## Observable (Development)
+
+Workflow
+
+Observable.js is java script library for interactivity. Best way is to develop them on a website called
+
+-   <https://observablehq.com/> (head quarter)
+
+You can then include the code via copy&paste into the cell (or) do it differently.
+
+## Observable (Resources)
+
+-   [InfoWorld: A beginners' guide to using JavaScript, R](https://www.infoworld.com/article/3674789/a-beginners-guide-to-using-observable-javascript-r-and-python-with-quarto.html)
+
+-   Quarto Docu <https://quarto.org/docs/computations/ojs.html>
+
+## Observable
+
+Is like a reactive framework. Variables listen to their changes and can be used before they are defined. It can be easily used with quatro (also to make interactive slides).
+
+The cool thing is that you can include functions from the community very easily. The following code downloads the summary-table
+
+```{ojs}
+//| echo: true
+import { SummaryTable } from "@observablehq/summary-table"
+```
+
+## Importing the data and visualizing {.smaller}
+
+This is the data in R:
+
+```{R data_in_r}
+dat = data.frame(matrix(ncol=2, nrow=33, c(22,131,41,139,52,128,23,128,41,171,54,105,24,116,46,137,56,145,27,106,47,111,57,141,28,114,48,115,58,153,9,123,49,133,59,157,30,117,49,128,63,155,32,122,50,183,67,176,33,99,51,130,71,172,35,121,51,133,77,178,40,147,51,144,81,217), byrow = TRUE))
+colnames(dat) = c('x', 'y')
+head(dat,3)
+```
+
+To use the data in observable
+
+```{r to_obs, echo=TRUE}
+  ojs_define(datt = dat)
+  #Ignore the error msg
+  # To write data which can be used later in obersvableHQ
+  #write.csv2(american.woman, "~/Downloads/data.csv", row.names = FALSE)
+```
+
+```{ojs}
+  // Inputs.table(aa) gives type error not itterable
+  dat = transpose(datt)
+  Inputs.table(dat)
+  
+  //For saving not working yet
+  //d3 = require("d3")
+  //d3.(mydata, "~/Dowload/data.csv");
+```
+
+## Importing from the cloud {.smaller}
+
+It has been uploaded a while ago into ObservableHQ and can be used from there via the following command
+
+```{ojs}
+// |echo: true
+import {american1Woman} from "50b32fe191bd30ce"
+```
+
+::: columns
+::: {.column width="40%"}
+Click on the car to filter. The right table will update
+
+To create a dynamic variable you can use `viewof` and a imput widgets, [see](https://quarto.org/docs/interactive/ojs/libraries.html).
+
+```{ojs}
+//| echo: true
+viewof table = Inputs.table(american1Woman)
+```
+:::
+
+::: {.column width="60%"}
+```{ojs}
+//| echo: true
+SummaryTable(table)
+```
+:::
+:::
+
+## Plot
+
+```{ojs}
+viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+viewof w = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+
+
+Plot.plot({
+  marks: [
+    Plot.dot(dat, {x: "x", y: "y"}),
+    Plot.line(curve(dat), {x: "x", y: "y"})
+  ]})
+  
+function curve(template){
+  const ages = template.map(d => d.x);
+  const [minAge, maxAge] = d3.extent(ages);
+  const xvals = d3.range(minAge, maxAge, (maxAge - minAge) / 100); 
+  let yhat = xvals.map(x => w*x + b);
+  return xvals.map((x, i) => ({x, y: yhat[i]})); //Thanks ChatGPT
+}
+```
