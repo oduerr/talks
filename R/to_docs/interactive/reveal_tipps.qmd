@@ -1,0 +1,70 @@
+---
+title: "Reveal Tipps"
+author: "Oliver"
+format:
+  revealjs:
+    page-layout: full
+    embed-resources: true 
+    theme: [default, ../shared_stuff/oliver_slides.scss]
+    slide-number: true
+    #smaller: true  
+    scrollable: true
+    # Geht nicht zum html exportieren 
+    #chalkboard: 
+    #  buttons: false
+    preview-links: auto
+    controls-layout: edges
+    logo: ../shared_stuff/images/ios.png
+    footer: <https://www.ios.htwg-konstanz.de/>
+---
+
+# Further Resource
+
+-   https://www.youtube.com/watch?v=hbf7Ai3jnxY&t=2964s
+
+# Bits and Pices
+
+-   Google font API in [see](https://www.google.com/search?q=Quarto+Observable.js+Presentation&oq=Quarto+Observable.js+Presentation+&aqs=chrome..69i57j0i546l3.132301j0j4&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:affc1d9c,vid:hbf7Ai3jnxY,st:2525) [source](https://github.com/jthomasmock/quarto-reporting)
+
+-   Adding image
+
+# Overwriting Defaults
+
+Use "fenced divs" to switch on incremental display
+
+    :::{.incremental}
+    * Point 1
+    * Point 2
+    :::
+
+::: incremental
+-   Point 1
+-   Point 2
+:::
+
+# Column Fragmets
+
+Fragmentation means code is diplayed later
+
+```{r, echo=TRUE}
+#| output-location: column-fragment
+plot(1:10)
+```
+
+## zoom in {.smaller}
+
+Use 'option' + click to zoom in
+
+```{r}
+1:1500
+```
+
+## Absolute Position
+
+::: {.absolute bottom="0" left="0"}
+Lower Left
+:::
+
+::: {.absolute top="0" left="0"}
+Upper Left
+:::

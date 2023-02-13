@@ -1,7 +1,7 @@
 ---
 title: "KI im Jahre 2023"
 subtitle: "Was ist das, was kann es, was kann es nicht?"
-author: "Prof. Oliver Dürr und Prof. Georg Umlauf"
+author: "Prof. Oliver Dürr, Prof. Georg Umlauf und ChatGPT"
 format:
   revealjs:
     embed-resources: true 
@@ -54,16 +54,6 @@ Kluger Hans um 1895; † nach 1916
 Speaker notes go here.
 :::
 
-## Deep Learning für Tumor Erkennung
-
-![](images/tissue.png)
-
-DL so gut wie PathologInnen ...
-
-::: footer
-Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Soltermann, Oliver Dürr, Beate Sick Deep Learning for Classification of Non-Small Cell Lung Cancer histologic subtypes. Poster ALMD 2019
-:::
-
 ## Tauben in der Tumorerkennung
 
 ![](images/image-1412603641.png)
@@ -76,9 +66,7 @@ Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Solter
 
     -   Allgemeine Intelligenz
 
-    -   Bewusstsein
-
-    -   "Science Fiction?"
+    -   Bewusstsein "Science Fiction?"
 
 -   Schwache KI (im folgenden nur KI)
 
@@ -92,182 +80,226 @@ Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Solter
 
         -   Bilderkennung, GO, Übersetzungen, ChatGPT
 
-
 ##### Enorme Fortschritte in KI, aber nicht der starken
 
 ## KI (AI), Machine Learning, Deep Learning
 
 ![](images/image-1420173548.png)
 
-Deep Learning started the AI Boom from \~ 2010 on
+Deep Learning dominates the current AI wave from \~ 2010 on
 
 ::: footer
 Slide credit: <https://www.datasciencecentral.com/profiles/blogs/artificial-intelligence-vs-machine-learning-vs-deep-learning>
+:::
+
+::: notes
+Evt gar nicht so gut vielleicht ist man dadurch in einer Sackgasse
 :::
 
 ## Anwendungen
 
 ![](images/image-260562600.png)
 
-## manipulateWidget
+## Alle NN bestehen aus Neuronen...
 
-## manipulateWidget
+![](images/image-1332246839.png)
 
-```{r}
-library(manipulateWidget) 
+...Mache haben aber mehr Neuronen als andere
 
-myPlotFun = function(country){
-  x <- c(1:100)
-  random_y <- rnorm(100, mean = 0)
-  data <- data.frame(x, random_y)
+## Verschiedene Architeckturen...
 
-  fig <- plot_ly(data, x = ~x, y = ~random_y, type = 'scatter', mode = 'lines')
+![](images/image-1937300209.png)
 
-  return(fig)
-}
+...aber es ändert sich nicht viel vom der linearen regression zu ChatGPT
 
+::: footer
+O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and tensorflow probability Manning Publications
+:::
 
-manipulateWidget(
-  myPlotFun(country), 
-  country = mwSelect(c("BE", "DE", "ES", "FR"))
-)
+## Beispiel: ChatGPT
+
+![](images/image-1352211049.png){width="600" height="150"}
+
+-   Art Language Model
+
+    -   Input X Sequence (bis zu 8000 Wörter[^1])
+
+    -   Output Y nächstes Wort (W'keiten)
+
+-   Typisches Netz 2020 GPT-3 175'000'000'000 Parameter
+
+[^1]: Es sind eigendlich Tokens können auch Teile eines Worts sein
+
+## Beispiel: Alexnet
+
+![](images/image-203014542.png){width="600" height="150"}
+
+-   Art Bild Klassifikation
+
+    -   Input X Bild z.B. 1024x1024 Pixel
+
+    -   Output Y Klasse Label (eines von 1000)
+
+-   Typisches Netz 2012 Alex Net 60'000'000 Parameter
+
+## Beispiel Lineare Regression
+
+![](images/image-258068647.png){width="600" height="150"}
+
+-   Art Lineare Regresion
+
+    -   Input X Zahl (X=alter)
+
+    -   Output Y Zahl (Y=Blutdruck)
+
+-   Typisches Lineare Regression Gauss XXX
+
+## Beispiel Fully Connected NN
+
+![](images/image-1543239431.png){width="600" height="150"}
+
+-   Art fully connected neural network
+
+    -   Input X 3 Zahlen Wetter heute (1,0,0)
+
+    -   Output 3 Zahlen Wetter morgen (Wahrscheinlichkeiten)
+
+-   Typisches Netz Fully Connected NN
+
+## Zusammenfassungen
+
+![](images/image-1772161160.png)
+
+# Training
+
+![](images/image-2012825134.png)
+
+## Training von NN (Beispiel Bildklassifikation)
+
+![](images/image-1991668931.png)
+
+## Training von ChatGPT
+
+1.  Vorhersage des nächsten Worts
+
+    -   Muss keine Daten labeln
+
+    -   Trainingsdaten "Internet" (common crawl)
+
+    -   $CO_2$ äquivalent 120 Auto für ein Jahr
+
+2.  Finetuning als Chatbot
+
+## Training von NN (Beispiel Blutdruck)
+
+![](images/image-1701436344.png)
+
+# Handson
+
+## Vorhersage des Blutdrucks
+
+```{R data_in_r}
+dat = data.frame(matrix(ncol=2, nrow=33, c(22,131,41,139,52,128,23,128,41,171,54,105,24,116,46,137,56,145,27,106,47,111,57,141,28,114,48,115,58,153,9,123,49,133,59,157,30,117,49,128,63,155,32,122,50,183,67,176,33,99,51,130,71,172,35,121,51,133,77,178,40,147,51,144,81,217), byrow = TRUE))
+colnames(dat) = c('x', 'y')
+head(dat,10)
+ojs_define(datt = dat)
 ```
-
-## leaflet
-
-```{r}
-library(leaflet)
-leaflet() %>%
-  addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
-```
-## Interactivity
 
 ```{ojs}
-//| panel: sidebar
-
-viewof bill_length_min = Inputs.range(
-  [32, 50], 
-  {value: 35, step: 1, label: "Bill length (min):"}
-)
-viewof islands = Inputs.checkbox(
-  ["Torgersen", "Biscoe", "Dream"], 
-  { value: ["Torgersen", "Biscoe"], 
-    label: "Islands:"
-  }
-)
+dat = transpose(datt)
 ```
 
-::: {.panel-tabset}
+Daten: Blutdruck von 33 Nordamerikanischen Frauen
 
-## Plot
+Q: Welchen Blutdruck schätzen Sie für eine 75 jährige Person?
 
-```{ojs}
-Plot.rectY(filtered, 
-  Plot.binX(
-    {y: "count"}, 
-    {x: "body_mass_g", fill: "species", thresholds: 20}
-  ))
-  .plot({
-    facet: {
-      data: filtered,
-      x: "sex",
-      y: "species",
-      marginRight: 80
-    },
-    marks: [
-      Plot.frame(),
-    ]
-  }
-)
-```
+::: footer
+TODO
+:::
 
 ## Data
 
 ```{ojs}
-Inputs.table(filtered)
+function lr(pw){
+ return(
+  Plot.plot({
+  marks: [
+    Plot.dot(dat, {x: "x", y: "y"}),
+    Plot.line(curve(dat), {x: "x", y: "y"})
+  ],
+  y: {
+    label: "Blutdruck",
+    domain: [80,200]
+  },
+  x: {
+    label: "Alter",
+    domain: [15,80]
+  },
+  width: pw,
+  height: pw/1.5,
+  color: "steelblue"
+})
+)
+} 
+
+function curve(template){
+  const ages = template.map(d => d.x);
+  const [minAge, maxAge] = d3.extent(ages);
+  const xvals = d3.range(minAge, maxAge, (maxAge - minAge) / 100); 
+  let yhat = xvals.map(x => w*x + b);
+  return xvals.map((x, i) => ({x, y: yhat[i]})); //Thanks ChatGPT
+}
+
+lr(900)
 ```
 
-:::
+## Training of the NN
 
-
-
-## Anwendungen
-
-```{r}
-#| echo: true
-#| fig-width: 10
-#| fig-height: 4.5
-library(ggplot2)
-ggplot(mtcars, aes(hp, mpg, color = am)) +
-  geom_point() +
-  geom_smooth(formula = y ~ x, method = "loess")
-
+```{ojs}
+lr(700)
 ```
 
-## LaTeX Equations
+```{ojs}
+//| panel: sidebar
+b_view = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+w_view = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+b = Generators.input(b_view)
+w = Generators.input(w_view)
 
-[MathJax](https://www.mathjax.org/) rendering of equations to HTML
 
-::: columns
-::: {.column width="40%"}
-``` tex
-\begin{gather*}
-a_1=b_1+c_1\\
-a_2=b_2+c_2-d_2+e_2
-\end{gather*}
-\begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
-\end{align}
-```
-:::
+function color(value) {
+  return  d3.scaleLinear().domain([-1, 0, 1]).range(['blue', 'gray', 'green'])(value);
+}
+function lw(value) {
+  return d3.scaleLinear().domain([-1, 1]).range([0.1, 1])(value);
+}
+dot`${my_graph}`
+my_graph = `digraph {
+  node [fontsize=20, fontname=Arial];
+  node [fixedsize=true, width=0.6, height=0.6];
+  edge [arrowhead=vee, arrowsize=0.7];
 
-::: {.column width="60%"}
-```{=tex}
-\begin{gather*}
-a_1=b_1+c_1\\
-a_2=b_2+c_2-d_2+e_2
-\end{gather*}
+  //b -> Y[penwidth=${10*lw(Math.abs(b))}, label=${b}]; //<-- Change the factor here
+  b -> Y[penwidth=2, label=${b}];
+  x1 -> Y[penwidth=2, label=${w}];
+  
+  x1 [label="x", pos="0,0"]; 
+  b  [label="1", pos="0,2"]; 
+  Y  [label="y", pos="1,0.8"]; 
+  //x1 [label="x", pos="0,0"];
+  //b  [label="1", pos="2,0"];
+  //Y  [label="y", pos="1,1"];
+}`
 ```
-```{=tex}
-\begin{align}
-a_{11}& =b_{11}&
-  a_{12}& =b_{12}\\
-a_{21}& =b_{21}&
-  a_{22}& =b_{22}+c_{22}
-\end{align}
-```
-:::
-:::
+
+# Backup
+
+## Deep Learning für Tumor Erkennung
+
+![](images/tissue.png)
+
+DL so gut wie PathologInnen ...
 
 ::: footer
-Learn more: [LaTeX Equations](https://quarto.org/docs/authoring/markdown-basics.html#equations)
-:::
-
-## Column Layout {.smaller}
-
-Arrange content into columns of varying widths:
-
-::: columns
-::: {.column width="35%"}
-#### Motor Trend Car Road Tests
-
-The data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles.
-:::
-
-::: {.column width="3%"}
-:::
-
-::: {.column width="62%"}
-```{r}
-knitr::kable(head(mtcars)[,c("mpg",	"cyl", "disp", "hp", "wt")])
-```
-:::
-:::
-
-::: footer
-Learn more: [Multiple Columns](https://quarto.org/docs/presentations/revealjs/#multiple-columns)
+Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Soltermann, Oliver Dürr, Beate Sick Deep Learning for Classification of Non-Small Cell Lung Cancer histologic subtypes. Poster ALMD 2019
 :::

@@ -4,6 +4,7 @@ subtitle: "Using Observable"
 author: "Oliver"
 format:
   revealjs:
+    page-layout: full
     embed-resources: true 
     theme: [default, ../shared_stuff/oliver_slides.scss]
     slide-number: true
@@ -36,7 +37,7 @@ My summary from 11/Feb/2023
 
     -   Other
 
-        -   <https://slides.com/> (not checked yet)
+        -   <https://slides.com/> (Visual editor for reveal.js not checked yet)
 
 -   Interactivity
 
@@ -135,27 +136,43 @@ SummaryTable(table)
 :::
 :::
 
-## The Data
+# Plotting
+
+## Resources
+
+* <https://observablehq.com/@observablehq/plot>
+
+
+## Layout
+* https://observablehq.com/@observablehq/views
+
+
+
+## The Data (working){auto-animate=true, auto-animate-easing="ease-in-out"}
+::: {data-id="lr" auto-animate-delay="0.1"}
 ```{ojs}
-//| panel: fill
-Plot.plot({
-  marks: [
-    Plot.dot(dat, {x: "x", y: "y"}),
-  ]})
-```
-
-
-
-
-## Plot
-
-```{ojs}
-Plot.plot({
+function lr(pw){
+ return(
+  Plot.plot({
   marks: [
     Plot.dot(dat, {x: "x", y: "y"}),
     Plot.line(curve(dat), {x: "x", y: "y"})
-  ]})
-  
+  ],
+  y: {
+    label: "Blutdruck",
+    domain: [80,200]
+  },
+  x: {
+    label: "Alter",
+    domain: [15,80]
+  },
+  width: pw,
+  height: pw/1.5,
+  color: "steelblue"
+})
+)
+} 
+
 function curve(template){
   const ages = template.map(d => d.x);
   const [minAge, maxAge] = d3.extent(ages);
@@ -163,22 +180,90 @@ function curve(template){
   let yhat = xvals.map(x => w*x + b);
   return xvals.map((x, i) => ({x, y: yhat[i]})); //Thanks ChatGPT
 }
+
+lr(900)
+```
+:::
+## Plot (Second Version){auto-animate=true, auto-animate-easing="ease-in-out"}
+
+
+```{ojs}
+lr(700)
 ```
 
 ```{ojs}
 //| panel: sidebar
-viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
-viewof w = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+b_view = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+w_view = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+b = Generators.input(b_view)
+w = Generators.input(w_view)
 
+
+function color(value) {
+  return  d3.scaleLinear().domain([-1, 0, 1]).range(['blue', 'gray', 'green'])(value);
+}
+function lw(value) {
+  return d3.scaleLinear().domain([-1, 1]).range([0.1, 1])(value);
+}
+dot`${my_graph}`
+my_graph = `digraph {
+  node [fontsize=20, fontname=Arial];
+  node [fixedsize=true, width=0.6, height=0.6];
+  edge [arrowhead=vee, arrowsize=0.7];
+
+  //b -> Y[penwidth=${10*lw(Math.abs(b))}, label=${b}]; //<-- Change the factor here
+  b -> Y[penwidth=2, label=${b}];
+  x1 -> Y[penwidth=2, label=${w}];
+  
+  x1 [label="x", pos="0,0"]; 
+  b  [label="1", pos="0,2"]; 
+  Y  [label="y", pos="1,0.8"]; 
+  //x1 [label="x", pos="0,0"];
+  //b  [label="1", pos="2,0"];
+  //Y  [label="y", pos="1,1"];
+}`
+```
+
+
+# Backup
+
+
+## Dumm
+```{ojs}
+dot`${my_graph}`
+```
+
+
+## Plot (D3)
+
+```{ojs}
+
+Plot.plot({
+  marks: [
+    Plot.dot(dat, {x: "x", y: "y"}),
+    Plot.line(curve(dat), {x: "x", y: "y"})
+  ],
+  y: {
+    domain: [80,200]
+  },
+  x: {
+    domain: [15,80]
+  }
+})
+```
+
+```{ojs}
+//| panel: sidebar
+layoutWidth
 draw(network, width, height, thickness)
 import {draw} from "@oduerr/visualizing-neural-networks"
-scale = 0.8
-width = 600*scale
-nodes_rad = 40*scale
-fs = 40*scale
+scale = 1
+width = 250*scale
+nodes_rad = 30*scale
+fs = 20*scale
 off_x = -15*scale
-height = 400*scale
-thickness = 20*scale
+height = 300*scale
+thickness = 10*scale
 network = ({
   nodes: [
     {id: '1-1', nr: 1, layer: 1, label: 'X'}, {id: '1-2', nr: 2, layer: 1, label: '1'},
@@ -189,8 +274,11 @@ network = ({
     {s: '1-2', t: '2-1', w: b/10}
   ]
 })
-
 ```
+
+
+
+
 
 
 
