@@ -144,12 +144,14 @@ SummaryTable(table)
 
 
 ## Layout
-* https://observablehq.com/@observablehq/views
+* On the observable side
+  + <https://observablehq.com/@observablehq/views>
+
+* On the Quarto side
+  + <https://quarto.org/docs/interactive/layout.html#input-panel>
 
 
-
-## The Data (working){auto-animate=true, auto-animate-easing="ease-in-out"}
-::: {data-id="lr" auto-animate-delay="0.1"}
+## The Data {auto-animate=true, auto-animate-easing="ease-in-out"}
 ```{ojs}
 function lr(pw){
  return(
@@ -183,21 +185,51 @@ function curve(template){
 
 lr(900)
 ```
-:::
-## Plot (Second Version){auto-animate=true, auto-animate-easing="ease-in-out"}
+::: Notes
 
+:::
+## Plot (With Sliders){auto-animate=true, auto-animate-easing="ease-in-out"}
 
 ```{ojs}
+//Redoing the plot
 lr(700)
 ```
 
+::: Asside
+Here we add simple sliders in a sidebar
+```
+//| panel: sidebar
+viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+```
+:::
+
 ```{ojs}
 //| panel: sidebar
-b_view = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
-w_view = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
-b = Generators.input(b_view)
-w = Generators.input(w_view)
+viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+viewof w = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+html`<br>y = ${w} &middot; x + ${b}<br>`
+```
 
+
+
+## Plot (With Sliders and a Neural Network){auto-animate=true, auto-animate-easing="ease-in-out"}
+
+```{ojs}
+//Redoing the plot
+lr(700)
+```
+::: Asside
+Using the same slider again with
+See <https://observablehq.com/@observablehq/synchronized-inputs?collection=@observablehq/inputs>
+```
+Inputs.bind(Inputs.range([-10, 120]), viewof b)
+```
+:::
+```{ojs}
+//| panel: sidebar
+Inputs.bind(Inputs.range([-10, 120]), viewof b)
+Inputs.bind(Inputs.range([-5, 5]), viewof w)
+html`<br>y = ${w} &middot; x + ${b}<br>`
 
 function color(value) {
   return  d3.scaleLinear().domain([-1, 0, 1]).range(['blue', 'gray', 'green'])(value);
@@ -205,6 +237,7 @@ function color(value) {
 function lw(value) {
   return d3.scaleLinear().domain([-1, 1]).range([0.1, 1])(value);
 }
+
 dot`${my_graph}`
 my_graph = `digraph {
   node [fontsize=20, fontname=Arial];

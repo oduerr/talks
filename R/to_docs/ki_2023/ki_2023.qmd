@@ -4,18 +4,19 @@ subtitle: "Was ist das, was kann es, was kann es nicht?"
 author: "Prof. Oliver Dürr, Prof. Georg Umlauf und ChatGPT"
 format:
   revealjs:
-    embed-resources: true 
+    embed-resources: false 
     theme: [default, ../shared_stuff/oliver_slides.scss]
     slide-number: true
-    #smaller: true  
+    #smaller: true  #Funktioniert nicht so gut 
     scrollable: true
     # Geht nicht zum html exportieren 
-    #chalkboard: 
-    #  buttons: false
+    chalkboard: 
+      buttons: true
     preview-links: auto
     controls-layout: edges
     logo: ../shared_stuff/images/ios.png
     footer: <https://www.ios.htwg-konstanz.de/>
+bibliography: references.bib
 ---
 
 ## Überblick
@@ -142,7 +143,7 @@ O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and 
 
 -   Typisches Netz 2012 Alex Net 60'000'000 Parameter
 
-## Beispiel Lineare Regression
+## Beispiel: GaussNet (Lineare Regression)
 
 ![](images/image-258068647.png){width="600" height="150"}
 
@@ -152,7 +153,11 @@ O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and 
 
     -   Output Y Zahl (Y=Blutdruck)
 
--   Typisches Lineare Regression Gauss XXX
+-   Typisches Lineare Regression Gauss (unpublished \~1795), Legendre (1805)
+
+::: notes
+"Our principle, which we have made use of since 1795, has lately been published by Legendre...."
+:::
 
 ## Beispiel Fully Connected NN
 
@@ -165,10 +170,6 @@ O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and 
     -   Output 3 Zahlen Wetter morgen (Wahrscheinlichkeiten)
 
 -   Typisches Netz Fully Connected NN
-
-## Zusammenfassungen
-
-![](images/image-1772161160.png)
 
 # Training
 
@@ -186,7 +187,7 @@ O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and 
 
     -   Trainingsdaten "Internet" (common crawl)
 
-    -   $CO_2$ äquivalent 120 Auto für ein Jahr
+    -   CO2 äquivalent 120 Auto für ein Jahr
 
 2.  Finetuning als Chatbot
 
@@ -194,9 +195,11 @@ O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and 
 
 ![](images/image-1701436344.png)
 
-# Handson
+# Einfache Netzwerke
 
-## Vorhersage des Blutdrucks
+## NN 1: Vorhersage des Blutdrucks
+
+Trainingsdaten: Blutdruck von 33 Nordamerikanischen Frauen (ersten 10)
 
 ```{R data_in_r}
 dat = data.frame(matrix(ncol=2, nrow=33, c(22,131,41,139,52,128,23,128,41,171,54,105,24,116,46,137,56,145,27,106,47,111,57,141,28,114,48,115,58,153,9,123,49,133,59,157,30,117,49,128,63,155,32,122,50,183,67,176,33,99,51,130,71,172,35,121,51,133,77,178,40,147,51,144,81,217), byrow = TRUE))
@@ -209,15 +212,13 @@ ojs_define(datt = dat)
 dat = transpose(datt)
 ```
 
-Daten: Blutdruck von 33 Nordamerikanischen Frauen
-
-Q: Welchen Blutdruck schätzen Sie für eine 75 jährige Person?
+Q: Welchen Blutdruck schätzen Sie für eine 75 jährige Frau (gegeben den Trainingsdaten)?
 
 ::: footer
-TODO
+Source: Colton. Statistics in Medicine (1974)
 :::
 
-## Data
+## Data {auto-animate="true," auto-animate-easing="ease-in-out"}
 
 ```{ojs}
 function lr(pw){
@@ -250,22 +251,52 @@ function curve(template){
   return xvals.map((x, i) => ({x, y: yhat[i]})); //Thanks ChatGPT
 }
 
-lr(900)
+lr(800)
 ```
 
-## Training of the NN
+Idee?
+
+## Lineare Regression {auto-animate="true," auto-animate-easing="ease-in-out"}
 
 ```{ojs}
-lr(700)
+lr(550)
 ```
+
+Model mit 2 parametern $w,b$, welches für jedes gegebenes Alter (x) den Blutdruck(y) vorhersagt:
+
+$$
+y = w \cdot x + b
+$$
 
 ```{ojs}
 //| panel: sidebar
-b_view = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
-w_view = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
-b = Generators.input(b_view)
-w = Generators.input(w_view)
+viewof b = Inputs.range([-10, 120], {label: "Intercept", step: 0.1})
+viewof w = Inputs.range([-5, 5], {label: "Slope", step: 0.1})
+html`<br>y = ${w} &middot; x + ${b}<br>`
+```
 
+## 
+
+![](images/image-1038034802.png)
+
+## Neuronale Netze
+
+![](images/image-941884643.png)
+
+## Lineare Regression as Neuronales Netz {auto-animate="true," auto-animate-easing="ease-in-out"}
+
+```{ojs}
+//Redoing the plot
+lr(550)
+```
+
+Parameter werden as Neuronen interpretiert.
+
+```{ojs}
+//| panel: sidebar
+Inputs.bind(Inputs.range([-10, 120]), viewof b)
+Inputs.bind(Inputs.range([-5, 5]), viewof w)
+html`<br>y = ${w} &middot; x + ${b}<br>`
 
 function color(value) {
   return  d3.scaleLinear().domain([-1, 0, 1]).range(['blue', 'gray', 'green'])(value);
@@ -273,6 +304,7 @@ function color(value) {
 function lw(value) {
   return d3.scaleLinear().domain([-1, 1]).range([0.1, 1])(value);
 }
+
 dot`${my_graph}`
 my_graph = `digraph {
   node [fontsize=20, fontname=Arial];
@@ -292,7 +324,219 @@ my_graph = `digraph {
 }`
 ```
 
+## NN 2 Wetter in Konstanz
+
+## NN 2 Wetter in Konstanz
+
+-   Output ist Wahrscheinlichkeit
+
+## Training großer Netze
+
+-   Lineare regression hat 2 parameter (slider)
+
+-   Grosse Netze haben Mio/Mrd parameter
+
+-   Training Minimierung einer Verlustfunktion auf den Trainingsdaten
+
+    -   Frage: Wie gut sagt das Model die Daten vorher (Maximum Likelihood Prinzip)
+
+    -   Algorithmus Backpropagation (Rummelhard)
+
+    -   Training von großen Netzten große technoligische Herausforderung
+
+::: callout-note
+## Vorhersagen nur so gut wie Trainingsbeispiele!
+:::
+
+::: footer
+@rumelhartLearningRepresentationsBackpropagating1986
+:::
+
+::: notes
+Chat-GPT Grundlage GTP3 mehrere Monate auf 1000 Rechnern
+:::
+
+# ChatGTP
+
+## Principles of ChatGPT {.incremental}
+
+![](images/image-1990935013.png)
+
+-   Transformer Architecture / self attention
+
+    -   Spezielle Art neuronen zu verbinden.\@vaswaniAttentionAllYou2017
+
+-   "trained with maximum likelihood"
+
+    -   "Normales Training"
+
+-   Generative Language Model \[...\] predict next token in a sequence of tokens
+
+    -   ...
+
+::: notes
+Maximum Likelihood Parameter des Models werden so eingestellt das beobachtete Trainings
+:::
+
+## Generating Text (You)
+
+![](images/image-2107565836.png)
+
+Wahrscheinlichkeiten (des Sprachmodels) für das nächste Wort
+
+-   trinken (70%)
+
+-   bieremoji (15%)
+
+-   oder (10%)
+
+-   sonstige kummuliert (5%)
+
+## Generating Text (ChatGPT)
+
+![](images/image-1990935013.png){fig-align="center"}
+
+::: incremental
+-   Steps 1: Describe your technology in one sentence. -\> I
+
+-   Steps 2: Describe your technology in one sentence. I -\> am
+
+-   Steps 3: Describe your technology in one sentence. I am -\> a
+
+-   Steps 4: Describe your technology in one sentence. I am a -\> generative
+
+-   Step 36 Describe your technology in one sentence. I am a ... new text. -\> \<END\>
+:::
+
+Beim Text wird das nächste Wort proportional zur Wahrscheinlichkeit ausgewürfelt.
+
+## Beispiel 1
+
+![](images/image-1958402932.png)
+
+## Beispiel 2
+
+![](images/image-45744430.png)
+
+# Fazit {.incremental}
+
+-   Deep Learning NN Modelle sind parametrische Modelle
+
+-   Input --\> Netzwerk mit Parametern --\> Output
+
+```{mermaid}
+flowchart LR
+  X(X Input) --> N[Netzwerk]
+  N --> Y(Output)
+```
+
+-   Einfachstes Beispiel lineare Regression
+
+-   Die Parameter werden an Trainingsdaten gefittet
+
+Oder prägnanter...
+
+## Der Kaiser ist nackt
+
+![](images/image-2019671148.png)
+
+\<\<All the impressive achievements of deep learning amount to just curve fitting\>\>
+
+Juda Pearl, 2018
+
+# Limitations of NN
+
+## Transparenz / Interpretation
+
+-   Einfach Modelle wie lineare Regression können interpretiert werden.
+
+-   Komplexe Modelle oft in den Vorhersagen besser.
+
+-   Kombination von einfachen interpretierbaren mit komplexen Modellen[^2]
+
+    -   Beispiel Vorhersage von Hautkrebs
+
+        -   Bild Daten mit tiefen NN
+
+        -   Alter mit linearer Regression
+
+-   Wichtigkeit von bestimmten Eingangsdaten für ein Modelentscheidungen.[^3]
+
+[^2]: @kook_herzog2020
+
+[^3]: E.g. LIME <https://arxiv.org/abs/1602.04938>
+
+## Bias
+
+```{ojs}
+lr(600)
+```
+
+-   Daten bassieren auf 33 nordamerikanischen Frauen
+-   Nicht übertragbar auf Männer / Assiaten
+
+## Bias in Sprachmodellen
+
+![](images/image-208396088.png)
+
+## Grundproblem Keine Kausalität
+
+![](images/image-747377808.png)
+
+::: notes
+Vielleicht befindet sich KI Forschung auch in einer Sackgasse
+:::
+
+## Statistische Natur von KI
+
+![](images/image-955836853.png)
+
+## Fazit
+
+KI ist ein hilfreiches Werkzeug
+
+-   Code für Aniationen wurde mit ChatGPT entwickelt
+
+-   Viele Nüzliche Anwendungen Medizin, Stromvorhersage,...
+
+Allerdings
+
+-   Auch wenn es schwerfällt zu glauben: kein inneres Verständniss[^4]
+-   Biased
+    -   Nur so gut wie Trainingsdaten
+
+    -   Schwer (bis unmöglich) bias rauszubekommen
+-   Intransparent
+
+[^4]:
+    ::: notes
+    Ich bin auch meist freundlich zu ChatGPT
+    :::
+
+::: notes
+:::
+
 # Backup
+
+## Weitere Probleme
+
+-   Overconfidence
+
+-   Nicht robust
+
+-   Nicht kausal
+
+## Overconfident
+
+![](images/image-1404952550.png)
+
+## Overconfident
+
+![](images/image-598885304.png)
+
+## Overconfident
+
+![](images/image-1222757233.png)
 
 ## Deep Learning für Tumor Erkennung
 
@@ -303,3 +547,9 @@ DL so gut wie PathologInnen ...
 ::: footer
 Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Soltermann, Oliver Dürr, Beate Sick Deep Learning for Classification of Non-Small Cell Lung Cancer histologic subtypes. Poster ALMD 2019
 :::
+
+## Zusammenfassungen
+
+![](images/image-1772161160.png)
+
+# 
