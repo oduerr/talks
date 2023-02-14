@@ -27,7 +27,7 @@ My summary from 11/Feb/2023
 
 -   Presentation Tools
 
-    -   Powerpoint and google-docs do not consistently allow to embed HTML
+    -   Powerpoint (limited) and google-docs do not consistently allow to embed HTML
 
     -   Quatro
 
@@ -50,6 +50,16 @@ My summary from 11/Feb/2023
 ::: notes
 Speaker notes go here.
 :::
+
+## Using PPT
+
+* Compile and checking
+
+```
+mv dumm_quarto.yml _quarto.yml
+quarto render #creates interactive_obs.html ~4MB
+```
+Move in docs folder and check in.
 
 ## Observable (Development)
 
