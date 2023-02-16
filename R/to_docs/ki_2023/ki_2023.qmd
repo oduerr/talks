@@ -2,16 +2,18 @@
 title: "KI im Jahre 2023"
 subtitle: "Was ist das, was kann es, was kann es nicht?"
 author: "Prof. Oliver Dürr, Prof. Georg Umlauf und ChatGPT"
-format:
+
+format: 
   revealjs:
-    embed-resources: false 
+    #faster rendering if not embedded
+    embed-resources: true 
     theme: [default, ../shared_stuff/oliver_slides.scss]
     slide-number: true
     #smaller: true  #Funktioniert nicht so gut 
     scrollable: true
     # Geht nicht zum html exportieren 
-    chalkboard: 
-      buttons: true
+    #chalkboard: 
+    #  buttons: true
     preview-links: auto
     controls-layout: edges
     logo: ../shared_stuff/images/ios.png
@@ -356,15 +358,16 @@ my_graph = `digraph {
 Chat-GPT Grundlage GTP3 mehrere Monate auf 1000 Rechnern
 :::
 
-# ChatGTP
-
-## Principles of ChatGPT {.incremental}
+## ChatGTP
 
 ![](images/image-1990935013.png)
 
+## Principles of ChatGPT
+
+::: incremental
 -   Transformer Architecture / self attention
 
-    -   Spezielle Art neuronen zu verbinden.\@vaswaniAttentionAllYou2017
+    -   Spezielle Art neuronen zu verbinden: @vaswaniAttentionAllYou2017
 
 -   "trained with maximum likelihood"
 
@@ -373,6 +376,7 @@ Chat-GPT Grundlage GTP3 mehrere Monate auf 1000 Rechnern
 -   Generative Language Model \[...\] predict next token in a sequence of tokens
 
     -   ...
+:::
 
 ::: notes
 Maximum Likelihood Parameter des Models werden so eingestellt das beobachtete Trainings
@@ -418,17 +422,37 @@ Beim Text wird das nächste Wort proportional zur Wahrscheinlichkeit ausgewürfe
 
 ![](images/image-45744430.png)
 
-# Fazit {.incremental}
+## Praktische Konsequenzen Prompt Design
+
+::: {.columns style="column-count: 2;"}
+::: {.column style="width: 40%;"}
+![](images/karparty_meme.jpg)
+:::
+
+::: {.column style="width: 60%;"}
+Alles hängt vom Input ab.
+
+*Beispiel*
+
+*Formulierung eines Absage Schreibens*
+
+    [Bitte Schreibe eine Höfliche Absage gehe auf folgende Punkte ein]
+    Keine Zeit
+    Mein Name ist Oliver Dürr 
+
+    --- Hier E-Mail hinpasten ----
+:::
+:::
+
+::: footer
+<https://twitter.com/karpathy/status/1273788774422441984>
+:::
+
+# Zwischen Fazit
 
 -   Deep Learning NN Modelle sind parametrische Modelle
 
--   Input --\> Netzwerk mit Parametern --\> Output
-
-```{mermaid}
-flowchart LR
-  X(X Input) --> N[Netzwerk]
-  N --> Y(Output)
-```
+![](images/X-N-Y.svg){width="300"}
 
 -   Einfachstes Beispiel lineare Regression
 
@@ -508,10 +532,7 @@ Allerdings
     -   Schwer (bis unmöglich) bias rauszubekommen
 -   Intransparent
 
-[^4]:
-    ::: notes
-    Ich bin auch meist freundlich zu ChatGPT
-    :::
+[^4]: Ich bin auch meist freundlich zu ChatGPT
 
 ::: notes
 :::

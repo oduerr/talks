@@ -5,7 +5,7 @@ author: "Oliver"
 format:
   revealjs:
     page-layout: full
-    embed-resources: true 
+    embed-resources: false 
     theme: [default, ../shared_stuff/oliver_slides.scss]
     slide-number: true
     #smaller: true  
