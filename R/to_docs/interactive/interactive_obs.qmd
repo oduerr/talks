@@ -237,8 +237,8 @@ Inputs.bind(Inputs.range([-10, 120]), viewof b)
 :::
 ```{ojs}
 //| panel: sidebar
-Inputs.bind(Inputs.range([-10, 120]), viewof b)
-Inputs.bind(Inputs.range([-5, 5]), viewof w)
+Inputs.bind(Inputs.range([-10, 120]),  b)
+Inputs.bind(Inputs.range([-5, 5]),  w)
 html`<br>y = ${w} &middot; x + ${b}<br>`
 
 function color(value) {

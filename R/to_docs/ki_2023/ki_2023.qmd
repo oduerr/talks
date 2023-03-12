@@ -29,15 +29,11 @@ bibliography: references.bib
 
 -   Prinzipielle Funktionsweise von neuronalen Netzen
 
-    -   Einfache NN
+    -   Einfache NN im Detail
 
-        -   Blutdruck aus Alter, Wetter
+-   Grenzen der KI
 
-    -   Komplexere NN (Prinzip)
-
-    -   Training von NN
-
--   Grenzen der KI / Prinzipbedingte Schwächen
+    -   Fokus auf Transparenz
 
 ::: notes
 KI ist so eine wichtige technology, das es wichtig ist eine ungefähre Idee der Funktionswqeise zu haben. ChatGPT wird einen ziemlichen Impact haben.
@@ -54,7 +50,7 @@ Kluger Hans um 1895; † nach 1916
 :::
 
 ::: notes
-Speaker notes go here.
+Ein Beispiel dafür das wir Menschen schnell irgendwas Inteligenz zuschreiben.
 :::
 
 ## Tauben in der Tumorerkennung
@@ -62,74 +58,54 @@ Speaker notes go here.
 ![](images/image-1412603641.png)
 
 10 Tauben so gut wie ein Pathologe: [youtube](https://www.youtube.com/watch?v=NsV6S8EsC0E)
-
-## Starke vs. schwache KI {.smaller}
-
--   Starke / allgemeine KI (general AI)
-
-    -   Allgemeine Intelligenz
-
-    -   Bewusstsein "Science Fiction?"
-
--   Schwache KI (im folgenden nur KI)
-
-    -   Konkreten Anwendungsproblemen
-
-    -   Leistungen in den letzten 50 Jahren
-
-        -   Taschenrechner, Schach
-
-    -   Enorme Steigerungen in den letzten 10 Jahren (Deep Learning)
-
-        -   Bilderkennung, GO, Übersetzungen, ChatGPT
-
-##### Enorme Fortschritte in KI, aber nicht der starken
+::: footer
+:::
 
 ## KI (AI), Machine Learning, Deep Learning
 
 ![](images/image-1420173548.png)
 
-Deep Learning dominates the current AI wave from \~ 2010 on
+Deep Learning ist der Treiber der jetzigen KI Welle (von 2012) an.
 
 ::: footer
-Slide credit: <https://www.datasciencecentral.com/profiles/blogs/artificial-intelligence-vs-machine-learning-vs-deep-learning>
+Slide credit: [artificial-intelligence-vs-machine-learning-vs-deep-learning](https://www.datasciencecentral.com/profiles/blogs/artificial-intelligence-vs-machine-learning-vs-deep-learning)
 :::
 
 ::: notes
-Evt gar nicht so gut vielleicht ist man dadurch in einer Sackgasse
+Alles schwache AI. Evt gar nicht so gut vielleicht ist man dadurch in einer Sackgasse
 :::
 
-## Anwendungen
+## Anwendungen der (schachen) KI
 
 ![](images/image-260562600.png)
+
+## Neuronale Netze
+
+![](images/image-941884643.png)
+
+::: notes
+Wenn wir NN sagen meinen wir immer die Biologischen
+:::
 
 ## Alle NN bestehen aus Neuronen...
 
 ![](images/image-1332246839.png)
 
-...Mache haben aber mehr Neuronen als andere
+...Mache haben aber mehr Neuronen als andere.
 
-## Verschiedene Architeckturen...
-
-![](images/image-1937300209.png)
-
-...aber es ändert sich nicht viel vom der linearen regression zu ChatGPT
-
-::: footer
-O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and tensorflow probability Manning Publications
-:::
+# Beispiele für Neuronale Netze
 
 ## Beispiel: ChatGPT
 
 ![](images/image-1352211049.png){width="600" height="150"}
 
--   Art Language Model
+-   Architektur: "Language Model"
 
-    -   Input X Sequence (bis zu 8000 Wörter[^1])
+    -   **Input**: X Sequenz (bis zu 8000 Wörter[^1])
 
-    -   Output Y nächstes Wort (W'keiten)
+    -   **Output**: Y Nächstes Wort (W'keiten)
 
--   Typisches Netz 2020 GPT-3 175'000'000'000 Parameter
+-   Typisches Netz **2020** GPT-3 175'000'000'000 Parameter (Neuronen) @brownLanguageModelsAre2020
 
 [^1]: Es sind eigendlich Tokens können auch Teile eines Worts sein
 
@@ -137,71 +113,59 @@ O. Dürr, B. Sick, E. Murina Probabilistic deep learning: With python keras and 
 
 ![](images/image-203014542.png){width="600" height="150"}
 
--   Art Bild Klassifikation
+-   Architektur: Bild Klassifikation
 
-    -   Input X Bild z.B. 1024x1024 Pixel
+    -   **Input** X Bild z.B. 1024x1024 Pixel
 
-    -   Output Y Klasse Label (eines von 1000)
+    -   **Output** Y Klasse Label (eines von 1000)
 
--   Typisches Netz 2012 Alex Net 60'000'000 Parameter
+-   Typisches Netz **2012** Alex Net 60'000'000 Parameter @NIPS2012_c399862d
+
+<!-- ## Beispiel: Fully Connected NN -->
+
+<!-- ![](images/image-1543239431.png){width="600" height="150"} -->
+
+<!-- -   Architektur: "fully connected neural network" -->
+
+<!--     -   **Input** X 3 Zahlen Wetter heute (1,0,0) -->
+
+<!--     -   **Output** 3 Zahlen Wetter morgen (Wahrscheinlichkeiten) -->
+
+<!-- -   Typisches Netz Fully Connected NN -->
 
 ## Beispiel: GaussNet (Lineare Regression)
 
 ![](images/image-258068647.png){width="600" height="150"}
 
--   Art Lineare Regresion
+-   Architektur Lineare Regresion
 
-    -   Input X Zahl (X=alter)
+    -   **Input** X Zahl (X=alter)
 
-    -   Output Y Zahl (Y=Blutdruck)
+    -   **Output** Y Zahl (Y=Blutdruck)
 
--   Typisches Lineare Regression Gauss (unpublished \~1795), Legendre (1805)
+-   Typisches Lineare Regression Gauss (unpublished \~ **1795**), Legendre (1805)
 
 ::: notes
 "Our principle, which we have made use of since 1795, has lately been published by Legendre...."
 :::
 
-## Beispiel Fully Connected NN
-
-![](images/image-1543239431.png){width="600" height="150"}
-
--   Art fully connected neural network
-
-    -   Input X 3 Zahlen Wetter heute (1,0,0)
-
-    -   Output 3 Zahlen Wetter morgen (Wahrscheinlichkeiten)
-
--   Typisches Netz Fully Connected NN
-
-# Training
+# Training von NN
 
 ![](images/image-2012825134.png)
+
+::: footer
+Slide credit: @durr2020probabilistic
+:::
 
 ## Training von NN (Beispiel Bildklassifikation)
 
 ![](images/image-1991668931.png)
 
-## Training von ChatGPT
-
-1.  Vorhersage des nächsten Worts
-
-    -   Muss keine Daten labeln
-
-    -   Trainingsdaten "Internet" (common crawl)
-
-    -   CO2 äquivalent 120 Auto für ein Jahr
-
-2.  Finetuning als Chatbot
-
-## Training von NN (Beispiel Blutdruck)
-
-![](images/image-1701436344.png)
-
-# Einfache Netzwerke
+# Einfache Netzwerke (im Detail)
 
 ## NN 1: Vorhersage des Blutdrucks
 
-Trainingsdaten: Blutdruck von 33 Nordamerikanischen Frauen (ersten 10)
+**Trainingsdaten**: Blutdruck von 33 Nordamerikanischen Frauen (ersten 10)
 
 ```{R data_in_r}
 dat = data.frame(matrix(ncol=2, nrow=33, c(22,131,41,139,52,128,23,128,41,171,54,105,24,116,46,137,56,145,27,106,47,111,57,141,28,114,48,115,58,153,9,123,49,133,59,157,30,117,49,128,63,155,32,122,50,183,67,176,33,99,51,130,71,172,35,121,51,133,77,178,40,147,51,144,81,217), byrow = TRUE))
@@ -214,7 +178,7 @@ ojs_define(datt = dat)
 dat = transpose(datt)
 ```
 
-Q: Welchen Blutdruck schätzen Sie für eine 75 jährige Frau (gegeben den Trainingsdaten)?
+**Aufgabe**: Blutdruck für eine 75 jährige Frau (gegeben den Trainingsdaten)?
 
 ::: footer
 Source: Colton. Statistics in Medicine (1974)
@@ -264,7 +228,7 @@ Idee?
 lr(550)
 ```
 
-Model mit 2 parametern $w,b$, welches für jedes gegebenes Alter (x) den Blutdruck(y) vorhersagt:
+Modell mit 2 Parametern $w,b$, welches für jedes gegebenes Alter ($x$) den Blutdruck($y$) vorhersagt:
 
 $$
 y = w \cdot x + b
@@ -281,18 +245,12 @@ html`<br>y = ${w} &middot; x + ${b}<br>`
 
 ![](images/image-1038034802.png)
 
-## Neuronale Netze
-
-![](images/image-941884643.png)
-
 ## Lineare Regression as Neuronales Netz {auto-animate="true," auto-animate-easing="ease-in-out"}
 
 ```{ojs}
 //Redoing the plot
-lr(550)
+lr(350)
 ```
-
-Parameter werden as Neuronen interpretiert.
 
 ```{ojs}
 //| panel: sidebar
@@ -326,11 +284,18 @@ my_graph = `digraph {
 }`
 ```
 
-## NN 2 Wetter in Konstanz
+-   Gewichte der Neuronen:
+    -   Parameter des Modells (hier 2 Werte)
+-   Training:
+    -   Bestimmen der optimalen Gewichte für Trainingsdaten
+-   Vorhersage:
+    -   Berechnung von $y$ aus $x$ (forwardpass)
 
-## NN 2 Wetter in Konstanz
+::: notes
+Training am Slider Ziehen Durch das Netz gehen
+:::
 
--   Output ist Wahrscheinlichkeit
+# Grosse Netzwerke
 
 ## Training großer Netze
 
@@ -364,7 +329,6 @@ Chat-GPT Grundlage GTP3 mehrere Monate auf 1000 Rechnern
 
 ## Principles of ChatGPT
 
-::: incremental
 -   Transformer Architecture / self attention
 
     -   Spezielle Art neuronen zu verbinden: @vaswaniAttentionAllYou2017
@@ -375,8 +339,7 @@ Chat-GPT Grundlage GTP3 mehrere Monate auf 1000 Rechnern
 
 -   Generative Language Model \[...\] predict next token in a sequence of tokens
 
-    -   ...
-:::
+    -   Sagt nächstes Wort vorraus
 
 ::: notes
 Maximum Likelihood Parameter des Models werden so eingestellt das beobachtete Trainings
@@ -409,44 +372,32 @@ Wahrscheinlichkeiten (des Sprachmodels) für das nächste Wort
 
 -   Steps 4: Describe your technology in one sentence. I am a -\> generative
 
+-   ...
+
 -   Step 36 Describe your technology in one sentence. I am a ... new text. -\> \<END\>
 :::
 
 Beim Text wird das nächste Wort proportional zur Wahrscheinlichkeit ausgewürfelt.
 
-## Beispiel 1
+## Zufälliges Auswählen: Beispiel 1
 
 ![](images/image-1958402932.png)
 
-## Beispiel 2
+## Zufälliges Auswählen: Beispiel 2
 
 ![](images/image-45744430.png)
 
-## Praktische Konsequenzen Prompt Design
+## Training von ChatGPT
 
-::: {.columns style="column-count: 2;"}
-::: {.column style="width: 40%;"}
-![](images/karparty_meme.jpg)
-:::
+1.  Vorhersage des nächsten Worts
 
-::: {.column style="width: 60%;"}
-Alles hängt vom Input ab.
+    -   Muss keine Daten labeln
 
-*Beispiel*
+    -   Trainingsdaten "Internet" (common crawl)
 
-*Formulierung eines Absage Schreibens*
+    -   CO2 äquivalent 120 Auto für ein Jahr
 
-    [Bitte Schreibe eine Höfliche Absage gehe auf folgende Punkte ein]
-    Keine Zeit
-    Mein Name ist Oliver Dürr 
-
-    --- Hier E-Mail hinpasten ----
-:::
-:::
-
-::: footer
-<https://twitter.com/karpathy/status/1273788774422441984>
-:::
+2.  Finetuning als Chatbot
 
 # Zwischen Fazit
 
@@ -460,7 +411,7 @@ Alles hängt vom Input ab.
 
 Oder prägnanter...
 
-## Der Kaiser ist nackt
+## 
 
 ![](images/image-2019671148.png)
 
@@ -468,109 +419,97 @@ Oder prägnanter...
 
 Juda Pearl, 2018
 
-# Limitations of NN
+# Transparenz von NN
 
-## Transparenz / Interpretation
+## Transparenz (im nachhinein)
 
--   Einfach Modelle wie lineare Regression können interpretiert werden.
+-   Wichtigkeit von bestimmten Eingangsdaten für die Entscheidungen.
 
--   Komplexe Modelle oft in den Vorhersagen besser.
+    ![](images/image-1368863582.png)
 
--   Kombination von einfachen interpretierbaren mit komplexen Modellen[^2]
+::: footer
+@10.1007/978-3-030-59491-6_40
+:::
 
-    -   Beispiel Vorhersage von Hautkrebs
+## Transparenz (Design der Netze)
 
-        -   Bild Daten mit tiefen NN
+-   Vorhersage vs. Interpretation
 
-        -   Alter mit linearer Regression
+    -   Einfach Modelle, wie lineare Regression können interpretiert werden.
 
--   Wichtigkeit von bestimmten Eingangsdaten für ein Modelentscheidungen.[^3]
+    -   Komplexe Modelle oft in den Vorhersagen besser.
 
-[^2]: @kook_herzog2020
+    -   Kombination von einfachen interpretierbaren mit komplexen Modellen
 
-[^3]: E.g. LIME <https://arxiv.org/abs/1602.04938>
+-   BMBF Projekts "[DeepDoubt](https://www.softwaresysteme.dlr-pt.de/de/ki-erkl-rbarkeit-und-transparenz.php)"
 
-## Bias
+::: columns
+::: {.column width="60%"}
+![](images/image-1108683085.png)
+:::
 
-```{ojs}
-lr(600)
-```
+::: {.column width="40%"}
+-   Bild Daten (hier Hautkrebs) mit tiefen NN 
+-   Alter mit linearer Regression
+:::
+:::
 
--   Daten bassieren auf 33 nordamerikanischen Frauen
--   Nicht übertragbar auf Männer / Assiaten
-
-## Bias in Sprachmodellen
-
-![](images/image-208396088.png)
-
-## Grundproblem Keine Kausalität
-
-![](images/image-747377808.png)
-
-::: notes
-Vielleicht befindet sich KI Forschung auch in einer Sackgasse
+::: footer
+@herzogDeepTransformationModels2022 @durr2022bernstein @kookEstimatingConditionalDistributions2022
 :::
 
 ## Statistische Natur von KI
 
 ![](images/image-955836853.png)
 
-## Fazit
+## Statistik
 
-KI ist ein hilfreiches Werkzeug
+![](images/image-1185358057.png)
 
--   Code für Aniationen wurde mit ChatGPT entwickelt
+Fussvergrößerung ==\> mehr Gehalt?
 
--   Viele Nüzliche Anwendungen Medizin, Stromvorhersage,...
+## Statistik vs. Kausalität {auto-animate="true," auto-animate-easing="ease-in-out"}
 
-Allerdings
+::: columns
+::: {.column width="60%"}
+![](images/image-1185358057.png)
+:::
 
--   Auch wenn es schwerfällt zu glauben: kein inneres Verständniss[^4]
--   Biased
-    -   Nur so gut wie Trainingsdaten
+::: {.column width="40%"}
+![](images/schuh_einkommen.png)
+:::
+:::
 
-    -   Schwer (bis unmöglich) bias rauszubekommen
--   Intransparent
+## KI ist nicht kausal (2023)
 
-[^4]: Ich bin auch meist freundlich zu ChatGPT
+![](images/image-747377808.png)
+
 
 ::: notes
+* Vielleicht befindet sich KI Forschung auch in einer Sackgasse
+Wichtige Fragestellungen sind Kausal:
 :::
 
-# Backup
+## Fazit
 
-## Weitere Probleme
+KI ist ein hilfreiches Werkzeug:
 
--   Overconfidence
+-   Code für Animationen wurde mit ChatGPT entwickelt
 
--   Nicht robust
+-   Viele Nüzliche Anwendungen Medizin, Stromvorhersage[^2],...
 
--   Nicht kausal
+[^2]: @arpogaus2021probabilistic
 
-## Overconfident
+Allerdings:
 
-![](images/image-1404952550.png)
+-   Auch wenn es schwerfällt zu glauben: kein inneres Verständniss
+-   Biased
+    -   Nur so gut wie Trainingsdaten
+-   Transparent
+    -   Maximal im statistischen Sinne
 
-## Overconfident
-
-![](images/image-598885304.png)
-
-## Overconfident
-
-![](images/image-1222757233.png)
-
-## Deep Learning für Tumor Erkennung
-
-![](images/tissue.png)
-
-DL so gut wie PathologInnen ...
-
-::: footer
-Elvis Murina, Ruben Casanova, Hanna Honcharova-Biletska, Bart Vrugt, Alex Soltermann, Oliver Dürr, Beate Sick Deep Learning for Classification of Non-Small Cell Lung Cancer histologic subtypes. Poster ALMD 2019
+::: notes
+Ich bin auch meist freundlich zu ChatGPT
 :::
 
-## Zusammenfassungen
-
-![](images/image-1772161160.png)
-
-# 
+## Literature
