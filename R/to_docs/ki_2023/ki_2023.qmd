@@ -1,7 +1,7 @@
 ---
 title: "KI im Jahre 2023"
 subtitle: "Was ist das, was kann es, was kann es nicht?"
-author: "Prof. Oliver Dürr, Prof. Georg Umlauf und ChatGPT"
+author: "Prof. Oliver Dürr, Prof. Georg Umlauf"
 
 format: 
   revealjs:
@@ -17,9 +17,21 @@ format:
     preview-links: auto
     controls-layout: edges
     logo: ../shared_stuff/images/ios.png
-    footer: <https://www.ios.htwg-konstanz.de/>
+    footer: <https://github.com/oduerr/stat>
 bibliography: references.bib
 ---
+
+<!-- 
+```{=html}
+
+Fuer die Webseite: 
+embed-resources: true
+und ohne chalkboard
+Für die Presentation
+ #chalkboard:
+    #  buttons: true
+```
+-->
 
 ## Überblick
 
@@ -57,15 +69,13 @@ Ein Beispiel dafür das wir Menschen schnell irgendwas Inteligenz zuschreiben.
 
 ![](images/image-1412603641.png)
 
-10 Tauben so gut wie ein Pathologe: [youtube](https://www.youtube.com/watch?v=NsV6S8EsC0E)
-::: footer
-:::
+10 Tauben so gut wie ein Pathologe: [youtube](https://www.youtube.com/watch?v=NsV6S8EsC0E) 
 
 ## KI (AI), Machine Learning, Deep Learning
 
 ![](images/image-1420173548.png)
 
-Deep Learning ist der Treiber der jetzigen KI Welle (von 2012) an.
+Deep Learning ist der Treiber der jetzigen KI Welle (von 2012 an).
 
 ::: footer
 Slide credit: [artificial-intelligence-vs-machine-learning-vs-deep-learning](https://www.datasciencecentral.com/profiles/blogs/artificial-intelligence-vs-machine-learning-vs-deep-learning)
@@ -79,7 +89,7 @@ Alles schwache AI. Evt gar nicht so gut vielleicht ist man dadurch in einer Sack
 
 ![](images/image-260562600.png)
 
-## Neuronale Netze
+## (Künstliche) Neuronale Netze
 
 ![](images/image-941884643.png)
 
@@ -94,6 +104,7 @@ Wenn wir NN sagen meinen wir immer die Biologischen
 ...Mache haben aber mehr Neuronen als andere.
 
 # Beispiele für Neuronale Netze
+Wichtig ist was hinten rauskommt (und vorne reingeht)
 
 ## Beispiel: ChatGPT
 
@@ -287,9 +298,14 @@ my_graph = `digraph {
 -   Gewichte der Neuronen:
     -   Parameter des Modells (hier 2 Werte)
 -   Training:
-    -   Bestimmen der optimalen Gewichte für Trainingsdaten
+    -   Bestimmen der opt. Gewichte für Trainingsdaten
 -   Vorhersage:
     -   Berechnung von $y$ aus $x$ (forwardpass)
+-   Interpretierbar:
+    -   Pro Jahr steigt Blutdruck um \${w} Punkte
+
+::: footer
+:::
 
 ::: notes
 Training am Slider Ziehen Durch das Netz gehen
@@ -305,9 +321,9 @@ Training am Slider Ziehen Durch das Netz gehen
 
 -   Training Minimierung einer Verlustfunktion auf den Trainingsdaten
 
-    -   Frage: Wie gut sagt das Model die Daten vorher (Maximum Likelihood Prinzip)
+    -   Trainingsprinzip: Wie gut sagt das Model die Daten vorher (Maximum Likelihood Prinzip)
 
-    -   Algorithmus Backpropagation (Rummelhard)
+    -   Algorithmus: Backpropagation (Rummelhard)
 
     -   Training von großen Netzten große technoligische Herausforderung
 
@@ -425,10 +441,10 @@ Juda Pearl, 2018
 
 -   Wichtigkeit von bestimmten Eingangsdaten für die Entscheidungen.
 
-    ![](images/image-1368863582.png)
+    ![](images/image-899155139.png)
 
 ::: footer
-@10.1007/978-3-030-59491-6_40
+https://arxiv.org/pdf/1311.2901.pdf
 :::
 
 ## Transparenz (Design der Netze)
@@ -449,13 +465,13 @@ Juda Pearl, 2018
 :::
 
 ::: {.column width="40%"}
--   Bild Daten (hier Hautkrebs) mit tiefen NN 
+-   Bild Daten (hier Hautkrebs) mit tiefen NN
 -   Alter mit linearer Regression
 :::
 :::
 
 ::: footer
-@herzogDeepTransformationModels2022 @durr2022bernstein @kookEstimatingConditionalDistributions2022
+@herzogDeepTransformationModels2022, @durr2022bernstein, @kookEstimatingConditionalDistributions2022
 :::
 
 ## Statistische Natur von KI
@@ -484,10 +500,8 @@ Fussvergrößerung ==\> mehr Gehalt?
 
 ![](images/image-747377808.png)
 
-
 ::: notes
-* Vielleicht befindet sich KI Forschung auch in einer Sackgasse
-Wichtige Fragestellungen sind Kausal:
+-   Vielleicht befindet sich KI Forschung auch in einer Sackgasse Wichtige Fragestellungen sind Kausal:
 :::
 
 ## Fazit
@@ -511,5 +525,7 @@ Allerdings:
 ::: notes
 Ich bin auch meist freundlich zu ChatGPT
 :::
+
+## Danke für Ihre Aufmerksamkeit
 
 ## Literature
