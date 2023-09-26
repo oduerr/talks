@@ -1,0 +1,40 @@
+---
+subtitle: "Oliver Dürr KI im Jahre 2023 (25-Sep Südkurier)"
+format: pdf
+---
+
+#### Aufgabe: Vorhersage des Blutdrucks aus dem Alter
+
+Unten dargestellt ist der Blutdruck von 33 nordamerikanischen Frauen in Abhängigkeit vom Alter. Versuchen Sie, den Blutdruck einer 40 jährigen Frau mit **Lineal** und Stift vorherzusagen.
+
+```{R data_in_r, hide=TRUE, echo=FALSE, fig.height=3, fig.width=5}
+library(ggplot2)
+dat = data.frame(matrix(ncol=2, nrow=33, c(22,131,41,139,52,128,23,128,41,171,54,105,24,116,46,137,56,145,27,106,47,111,57,141,28,114,48,115,58,153,9,123,49,133,59,157,30,117,49,128,63,155,32,122,50,183,67,176,33,99,51,130,71,172,35,121,51,133,77,178,40,147,51,144,81,217), byrow = TRUE))
+colnames(dat) = c('Alter', 'Blutdruck')
+#Creates a plot suitable for a presentation 
+ggplot(dat, aes(x=Alter, y=Blutdruck)) + geom_point() +
+# geom_smooth(method=lm) + 
+theme_minimal() + theme(legend.position="none")
+```
+
+**Gratulation!** Sie haben gerade eine KI eingesetzt.
+
+1.  Sie haben ein Model mit zwei *Parameter* verwendet (Steigung und Y-Achsen Abschnitt) auch oft *Gewichte* genannt.
+2.  Sie haben die Parameter anhand von *Trainingsdaten* bestimmt. *Training des Models*
+3.  Sie haben eine Vorhersage getroffen, indem Sie das Alter in das trainierte Model eingesetzt haben. *Inferenz*
+
+#### Aufgabe: Interpretation des Models
+
+Im algemeinen ist es nicht möglich, die Parameter eines Models zu interpretieren. In diesem Fall ist es aber möglich. Um wieviel steigt der Blutdruck, wenn das Alter um ein Jahr steigt in folgenden Model?
+
+![](images/Screenshot%202023-09-24%20at%2010.14.55.png){width="100"}
+
+**Beachten** Sie die Anzahl der Parameter entspricht der Anzahle der Kanten/Pfeile.
+
+<!-- ## Zusammenfassung Teil 1
+
+-   NN haben Parameter (Gewichte / Kanten) Lineare Regression: 2 Parameter Bilder: 60 Millionen Parameter Sprachmodelle: Milliarden von Parameter
+
+-   Die Werte der Parameter werden durch Training auf den Trainingsdaten bestimmt
+
+-   Limitierungen (Bias, Interpretierbarkeit, Robustheit gegen Verlassen Trainingsdaten, Quantfizierung der Unsicherheit) -->

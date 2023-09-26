@@ -1,0 +1,14 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}[>=Stealth]
+  \node (Gender) {Gender};
+  \node [below left=of Gender] (ShoeSize) {Shoe Size};
+  \node [below right=of Gender] (Salary) {Salary};
+
+  \draw[->] (Gender) -- (ShoeSize);
+  \draw[->] (Gender) -- (Salary);
+\end{tikzpicture}
+\end{document}

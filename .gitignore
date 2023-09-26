@@ -53,3 +53,11 @@ R/to_docs/interactive/_extensions/*
 R/to_docs/quarto_tipps_files/_extensions/*
 
 R/to_docs/quarto_tipps_files/*
+R/to_docs/ki_handout/images/*
+R/to_docs/ki_handout/ki_2023_handout_files/*
+*.DS_Store
+*.html
+*.aux
+R/to_docs/ki_handout/SCM.fdb_latexmk
+*.fls
+*.log
