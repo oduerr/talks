@@ -31,6 +31,7 @@ Im algemeinen ist es nicht möglich, die Parameter eines Models zu interpretiere
 
 **Beachten** Sie die Anzahl der Parameter entspricht der Anzahle der Kanten/Pfeile.
 
+```{=html}
 <!-- ## Zusammenfassung Teil 1
 
 -   NN haben Parameter (Gewichte / Kanten) Lineare Regression: 2 Parameter Bilder: 60 Millionen Parameter Sprachmodelle: Milliarden von Parameter
@@ -38,3 +39,4 @@ Im algemeinen ist es nicht möglich, die Parameter eines Models zu interpretiere
 -   Die Werte der Parameter werden durch Training auf den Trainingsdaten bestimmt
 
 -   Limitierungen (Bias, Interpretierbarkeit, Robustheit gegen Verlassen Trainingsdaten, Quantfizierung der Unsicherheit) -->
+```
