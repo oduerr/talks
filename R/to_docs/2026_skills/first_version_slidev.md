@@ -13,10 +13,39 @@
 <!-- HTWG Konstanz / TIDIT.ch -->
 
 ---
+layout: center
+---
+
+# Skills and the CLI Renaissance
+
+| Date | Event | Why it matters |
+|------|-------|----------------|
+| Feb 2025 | **Claude Code** | Terminal agent becomes mainstream [^1] |
+| May 2025 | **Codex** | OpenAI joins the terminal-agent race [^2] |
+| Jun 2025 | **Gemini CLI** | Google brings an open-source terminal agent [^3] |
+| Oct 2025 | **Anthropic Skills** | Reusable, on-demand workflows [^4] |
+| 2026 | **Codex Skills, Gemini Skills, OpenClaw** | Skills become a cross-tool pattern [^5][^6][^7] |
+
+> **Takeaway:**  
+> The CLI renaissance started in 2025.  
+> **Skills made it extensible.**
+
+<div style="font-size: 10px; margin-top: 1.2em; opacity: 0.8;">
+[^1]: Anthropic announcement, “Claude 3.7 Sonnet and Claude Code” (Feb 24, 2025) — https://www.anthropic.com/news/claude-3-7-sonnet  
+[^2]: OpenAI announcement, “Introducing Codex” (May 16, 2025) — https://openai.com/index/introducing-codex/  
+[^3]: Google announcement, “Gemini CLI: your open-source AI agent” (Jun 25, 2025) — https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-cli-open-source-ai-agent/  
+[^4]: Anthropic announcement, “Introducing Agent Skills” (Oct 16, 2025) — https://claude.com/blog/skills  
+[^5]: OpenAI Codex Agent Skills — https://developers.openai.com/codex/skills/  
+[^6]: Gemini CLI Agent Skills — https://geminicli.com/docs/cli/skills/  
+[^7]: OpenClaw Skills — https://docs.openclaw.ai/tools/skills  
+</div>
+---
 
 # Resources
 - https://code.claude.com/docs/en/overview Claud Code Docs (You can chat with it)
 - https://github.com/mgechev/skills-best-practices
+- https://claude.com/blog/skills-explained (Blog Post introducing Skills)
+- https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
 
 ---
 
@@ -28,8 +57,10 @@
 | **Gemini 3.1 Pro** | Google | $2.00 | ~$0.20 | $12.00 | 80.6% |
 | **GPT-5.2** | OpenAI | $1.75 | — | $14.00 | 80.0% |
 
-Open Source models
-- Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
+
+- **Open Source models**
+
+    Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
 
 SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
 Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
@@ -38,7 +69,7 @@ Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platfo
 layout: cover
 ---
 
-# Modes of Interaction
+# Modes of Interaction with AI
 
 ---
 
@@ -48,9 +79,9 @@ layout: cover
 |----------|----------|----------|-------|
 | ChatGPT | OpenAI | Nov 2022 | First mainstream LLM chat |
 | Bard / Gemini | Google | Mar 2023 / Feb 2024 | Rebranded to Gemini |
-| Claude | Anthropic | Mar 2023 | Constitutional AI |
-| HuggingChat | Hugging Face | Apr 2023 | Open-source models |
+| Claude | Anthropic | Mar 2023 |  |
 | Open WebUI | Community | 2023 | Self-hosted, Ollama backend |
+
 
 - In original form: just conversation
 - Tool calls: user &rarr; LLM &rarr; copy to tool &rarr; paste result &rarr; LLM
@@ -58,28 +89,36 @@ layout: cover
 
 ---
 
-# Level 2 — AI Coding IDEs: Do When You Trigger Them
+# Level 2 — AI Coding IDEs: 
+### Do When You Trigger Them
+![AI Coding IDEs](./imgs/vs_code.png)
 
-<!-- Screenshot will be provided -->
 
-| Tool | Type | Released | Open Source |
-|------|------|----------|:-----------:|
-| GitHub Copilot | IDE Plugin | Jun 2022 | No |
-| Cursor | VS Code Fork | Mar 2023 | No |
-| Windsurf (Codeium) | VS Code Fork | Nov 2024 | No |
-| Roo Code | VS Code Plugin | 2024 | Yes |
-| Antigravity | IDE | 2025 | No |
 
 ---
 
 # Level 2 — AI Coding IDEs (cont.)
 
-- **Tools**: predefined tool set, Unix commands, MCP servers
+| Tool | Type | Released | Open Source |
+|------|------|----------|:-----------:|
+| GitHub Copilot | VS IDE Plugin | Jun 2022 | No |
+| Roo Code | VS Code Plugin | 2024 | Yes |
+| Cursor | AI IDE (VS Code Fork) | Mar 2023 | No |
+| Windsurf (Codeium) | AI IDE (VS Code Fork) | Nov 2024 | No |
+| Antigravity | AI IDE (VS Code Fork) | 2025 | No |
+
+- **Tools**: predefined tool set, MCP servers
 - **Preferences**: `AGENTS.md`, rules files, custom instructions
 - Tightly integrated in IDE, typically built for coding
 
 > **Question:** Do we even need a traditional IDE in the future?
 > Cursor is becoming more like a tool to orchestrate agents.
+
+---
+
+# Level 2 — Command Line Interfaces 
+### CLIs
+![Gemini CLI](./imgs/claude.webp){height=100}
 
 ---
 
@@ -92,15 +131,14 @@ layout: cover
 | CLI | Provider | Released |
 |-----|----------|----------|
 | **Claude Code** | Anthropic | Feb 2025 |
-| **Codex CLI** | OpenAI | Apr 2025 |
+| **Codex CLI** | OpenAI | May 2025 |
 | **Gemini CLI** | Google | Jun 2025 |
 
-<!-- Screenshot will be provided -->
 
 - **Tools**: terminal commands (naturally!), MCP servers, **skills**
 - **Extensions**: browser automation, system-level actions on your behalf
 - CLIs feel more natural for **non-coding tasks** (can still do coding too)
-- CLIs are also the LLM providers' answer to Cursor & GitHub Copilot
+- CLIs seem to be the LLM providers' answer to Cursor & GitHub Copilot
 
 ---
 layout: image-right
@@ -119,22 +157,25 @@ Works on Linux, macOS, Windows (PowerShell).
 > We'll come back to this with demos later.
 
 ---
-
+layout: image-right
+image: ./imgs/openClaw.png
+backgroundSize: 31em 100%
+---
 # Level 3 — Hosted Agents
+
 
 Agents waiting to be triggered by external events.
 
 - **n8n** — workflow / event automation with agent features
 - ...
-- **openClaw**
+- **openClaw** 🦞
 
-<!-- Screenshot will be provided (openClaw Mania) -->
-
-### Trigger Sources
+#### Trigger Sources
 
 - Incoming E-Mail, Slack, Telegram, webhooks, etc.
 - Scheduled tasks, e.g. every day at 8:00 AM
 - Git events (PR opened, issue created, ...)
+- Can also use skills
 
 ---
 layout: cover
@@ -154,7 +195,7 @@ This usually happens in a loop (aka Reason Act Loop, ReAct)
 
 Step 2 and 3 are iterated until success (the ReAct loop ends).
 
-![ReAct Loop Illustration](imgs/react_from_bbs25.png)
+![ReAct Loop Illustration](./imgs/react_from_bbs25.png)
 
 
 > We will implement a simple ReAct loop 'manually' later.
@@ -167,8 +208,8 @@ Step 2 and 3 are iterated until success (the ReAct loop ends).
 
 - IDE integrations started with this approach
 - A set of predefined tools, registered completely in the **initial prompt**
-- Example: Roo Code uses ~50K tokens just for tool definitions ()
-- Repeated tool calling and parsing output (ReAct loop)
+    - Example: Roo Code uses ~50K tokens just for tool definitions
+    -   Repeated tool calling and parsing output (ReAct loop)
 
 > **Problem**: fixed toolset, large prompt overhead — every model call pays for the full tool schema.
 
@@ -176,6 +217,7 @@ Step 2 and 3 are iterated until success (the ReAct loop ends).
 
 # MCP Servers
 
+**TODO** Nicer Slide
 **Model Context Protocol** — a standard to extend LLM capabilities.
 
 ```
@@ -196,17 +238,22 @@ Token efficiency: Only the relevant parts are loaded into context — saves toke
 
 # Skills
 
-- Introduced early 2025 with **Claude Code**
+- Introduced October 2025 with **Claude Code**
+- Now included in other CLIs (gemini, codex)
 - A way to extend CLI capabilities and adapt them to your needs
-- Plain **Markdown files** that can call other CLI tools
-  - Including other skills, Python, Bash, etc.
+- Simple **Markdown files** 
+    - Describe desired behaviour
+- **Markdown files** can also describe how to call 
+    - CLI tools including Python, Bash, etc.
+    - Other Skills
+    - MCP Servers
 - Token efficient via **progressive disclosure** — only loaded when needed
 
-See: [Agent Skills Overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
+
 
 ---
 
-## Skills — Typical Structure
+# Skills — Typical Structure
 
 ```markdown
 pdf-skill/
@@ -221,9 +268,8 @@ Saving Context with **Progressive disclosure**:
 - Level 1: Header of `SKILL.md` used to register the skill.
 - Level 2: Read `SKILL.md` itself, which could also reference other files.
 - Level 3: Other files like `FORMS.md` and `REFERENCE.md` are loaded on demand.
-
 ---
-layout: center
+layout: cover
 ---
 
 # Demo Time
@@ -235,9 +281,9 @@ layout: center
 Translates a recipe into my preferred format with mise en place and ingredient lists.
 
 - The skill is public: [github.com/oduerr/skills_public/.../easy_chef](https://github.com/oduerr/skills_public/tree/main/skills/easy_chef)
-- Uses just `SKILL.md` — no scripts needed (small header to register the skill)
+- No scripts needed just uses just begining (YAML-Header) is to reqister `SKILL.md`:
 
-```code
+```markdown
 ---
 name: easy_chef
 description: "Use whenever the user shares a recipe or asks to simplify, reformat, or explain a dish ..."
@@ -252,6 +298,7 @@ Inside CLI (claude, gemini)
 ```
 Give me a recipe of new york cheesecake.
 ```
+Will triger the skill and render e mises en-place recipie
 
 ---
 
@@ -297,10 +344,6 @@ Welche Mails habe ich am Schmotzigen Dunstig 2024 bekommen?
 ```
 
 ```
-which tools did you use with which calls?
-```
-
-```
 Wieviele Mails sind in der Datenbank?
 ```
 
@@ -328,17 +371,27 @@ Let's look at the output using `claude-devtools`:
 layout: center
 ---
 
-![HTWG Mail Query Output](imgs/emails_getting_total_num.png)
-
-
---- 
-
-# The Power of the Shell
-### (with demos)
+![HTWG Mail Query Output](./imgs/emails_getting_total_num.png)
 
 ---
 
-# Remember the 70s?
+# A Skill Can Spawn Other CLIs
+
+### Demo: Council of Bots
+
+- A task you want to ask **Gemini, Claude, and OpenAI** simultaneously
+- Start 3 CLIs in parallel and collect answers from each
+- Merge and consolidate the answers
+
+This is implemented as a skill that spawns 3 CLIs and merges responses.
+
+See: [github.com/slds-lmu/ai-scaffolding/.../council-of-bots](https://github.com/slds-lmu/ai-scaffolding/tree/main/skills/council-of-bots)
+
+---
+layout: image-right
+image: https://upload.wikimedia.org/wikipedia/commons/9/99/DEC_VT100_terminal.jpg
+---
+# The Power of the Shell (In the 80s)?
 
 ```bash
 echo "Hello, World" | wc -c
@@ -354,6 +407,12 @@ echo "Hello, World" | awk '{print $2}' | wc -c
 wc < file.txt
 ```
 
+.
+.
+
+
+>Small programs, which can do one thing very good are piped together.
+
 <!--
 Speaker notes:
 wc -c counts the number of characters in the input.
@@ -362,22 +421,18 @@ For tokens, one could use ttok.
 
 ---
 
-# The CLI Is a Command!
+# The power of the Shell in 2026
 
+### Example 1
 ```bash
 echo "What is 'Hello Guys' in Chinese and Italian" | gemini
 ```
 
-```bash
-echo "What is 'Hello Guys' in Chinese and Italian" 
-  | gemini --model gemini-2.5-flash
-```
+**Output**: In Chinese: **大家好** (Dàjiā hǎo) In Italian: **Ciao ragazzi**
+
+### Example 2
 
 Pipe text directly into an LLM — just like any other Unix tool.
-
----
-
-# Piping Across LLMs
 
 ```bash
 gemini -p "Is this a good recipe?" < schwaebischer_kartoffelsalat.md 
@@ -399,41 +454,47 @@ Two models, one pipeline. Gemini evaluates, Claude translates.
 
 ---
 
-# A Skill Can Spawn Other CLIs
+# The power of the Shell: Many Tools go CLI
 
-### Demo: Council of Bots
+**Many modern tools expose a command line interface**
 
-- A task you want to ask **Gemini, Claude, and OpenAI** simultaneously
-- Start 3 CLIs in parallel and collect answers from each
-- Merge and consolidate the answers
+- **Web browsers** — Puppeteer, Playwright  
+- **Platforms** — GitHub CLI (`gh`), GitLab CLI  
+- **Cloud** — AWS CLI, Google Cloud CLI  
+- **PIM** - Obsidean CLI
 
-This is implemented as a skill that spawns 3 CLIs and merges responses.
+**Agents can operate these tools via the shell**
 
-See: [github.com/slds-lmu/ai-scaffolding/.../council-of-bots](https://github.com/slds-lmu/ai-scaffolding/tree/main/skills/council-of-bots)
+```markdown
+Agent  →  Skill (optional)  →  CLI tool  →  Result
+```
+
+- **CLI tools** = capabilities  
+- **Skills** = reusable workflows  
+- **Agent** = decides what to run
 
 ---
 
-<div v-if="false">
+## Practical Tips
 
-## Tracing
+- Skills are just Markdown files and easy to create.
+- Talk to the Claude (ChatApplication) and ask it to create the skill for you. It will eat his own dogfood and use the skill creator skill.
+- Skill are compatible with all CLIs (Claude Code, Gemini CLI, ...) and also run on openClaw 🦞
+- 
+- Use `claude-devtools` to inspect the output of the claude code.
 
-Observability for CLI agents — seeing what the LLM actually does.
 
-- **Claude Code**: see [Simon Willison's writeup](https://simonwillison.net/2025/Jun/2/claude-trace/)
-  Unfortunately broken in newer Claude versions.
-- **Gemini CLI**: [telemetry docs](https://google-gemini.github.io/gemini-cli/docs/cli/telemetry.html)
-  JSON dump available, but not very readable.
+--- 
+layout: cover
+---
 
-> **Future direction**: OpenTelemetry integration + dedicated visualizers
-> would make agent tracing much more usable.
-
-</div>
+## Manuel Implementation of an Simple Agent 
 
 ---
 
 ## Manuel Implementation of an Agent (Showing the ReAct Loop)
 
-The idea is to create a simple agent in python that implements the ReAct loop, implementing the eamil-router skill.
+The idea is to create a simple agent in python that implements the ReAct loop, implementing the email-router skill.
 
 **Prompt** given to Claude Code:
 > Create a Python file (email-agent.py) that uses the OpenAI-compatible API (configured for openAI) to call LLMs and execute tools. The agent loads ~/.claude/skills/email-router/SKILL.md as system prompt and has a single tool read_context(filename) that reads .md files from the same skill directory. The ReAct loop runs until no more tool calls are made.
@@ -475,7 +536,7 @@ TOOLS = [
 
 ## Key components (Prepare the prompt)
 
-Composing the first message:
+Composing the first message, we use the same 'SKILL.md', we used for the 'email_router' file as the system prompt.
 ```python
 # System-Prompt = SKILL.md 
 skill_md = SKILL_MD.read_text() # "Du bist Oliver Dürrs persönlicher E-Mail-Assistent. "
@@ -491,6 +552,7 @@ history.append({"role": "user", "content": user_message})
 
 
 ---
+
 ## Key components (ReAct loop)
 
 ```python
@@ -521,15 +583,6 @@ while True:
                     "content": result
                 })
 ```
---- 
-## Practical Tips
-
-- Skills are just Markdown files and easy to create.
-- Talk to the Claude (ChatApplication) and ask it to create the skill for you. It will eat his own dogfood and use the skill creator skill.
-- Skill are compatible with all CLIs (Claude Code, Gemini CLI, ...) and also run on openClaw :lobster:
-- Use `claude-devtools` to inspect the output of the claude code.
-
-
 ---
 layout: cover
 ---
@@ -537,3 +590,25 @@ layout: cover
 # Thank You
 
 **Oliver Dürr** 
+
+
+---
+layout: cover
+---
+
+# Attick
+
+
+---
+
+## Tracing
+
+Observability for CLI agents — seeing what the LLM actually does.
+
+- **Claude Code**: see [Simon Willison's writeup](https://simonwillison.net/2025/Jun/2/claude-trace/)
+  Unfortunately broken in newer Claude versions.
+- **Gemini CLI**: [telemetry docs](https://google-gemini.github.io/gemini-cli/docs/cli/telemetry.html)
+  JSON dump available, but not very readable.
+
+> **Future direction**: OpenTelemetry integration + dedicated visualizers
+> would make agent tracing much more usable.
