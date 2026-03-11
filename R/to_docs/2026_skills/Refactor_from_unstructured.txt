@@ -1,0 +1,3 @@
+I am refactoring a talk about CLI tools with a focus on skills. 
+
+Here is a first draft w/o too much layout and freetext. Create a Marp Markdown structure for presentation. Also do/finish tasks label with []. Please keep tone and content.

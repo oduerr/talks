@@ -1,23 +1,16 @@
----
-marp: true
-theme: default
-paginate: true
-footer: 'CLI and Skills · 2026'
-style: |
+<style>
   section { font-size: 24px; }
   table { font-size: 17px; margin: auto; }
   h1 { color: #2d5986; }
-  section.lead h1 { font-size: 48px; color: #1a3a5c; }
-  section.lead { text-align: center; }
+  .cover h1 { font-size: 48px; color: #1a3a5c; }
+  .cover { text-align: center; }
   blockquote { border-left: 4px solid #2d5986; padding-left: 1em; color: #555; }
----
+</style>
 
-<!-- _class: lead -->
-<!-- _paginate: false -->
-<!-- _footer: '' -->
 # CLI Agents, Skills & the Return of the Shell
 **Oliver Dürr**
 <!-- HTWG Konstanz / TIDIT.ch -->
+
 ---
 
 # Resources
@@ -25,6 +18,7 @@ style: |
 - https://github.com/mgechev/skills-best-practices
 
 ---
+
 # LLMs — The Workhorses (API Models)
 
 | Model | Provider | Input $/M | Cached $/M | Output $/M | SWE-bench |
@@ -58,8 +52,8 @@ Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platfo
 - Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud
 
 ---
-
-<!-- _class: lead -->
+layout: cover
+---
 
 # Modes of Interaction
 
@@ -126,12 +120,11 @@ Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platfo
 - CLIs are also the LLM providers' answer to Cursor & GitHub Copilot
 
 ---
+layout: image-right
+image: https://upload.wikimedia.org/wikipedia/commons/9/99/DEC_VT100_terminal.jpg
+---
 
 # The Power of the Shell
-
-<!-- _footer: '' -->
-
-![bg right:35%](https://upload.wikimedia.org/wikipedia/commons/9/99/DEC_VT100_terminal.jpg)
 
 The shell — since the 1970s.
 Works on Linux, macOS, Windows (PowerShell).
@@ -161,8 +154,8 @@ Agents waiting to be triggered by external events.
 - Git events (PR opened, issue created, ...)
 
 ---
-
-<!-- _class: lead -->
+layout: cover
+---
 
 # Tool Calling & Preferences
 
@@ -182,6 +175,7 @@ Step 2 and 3 are iterated until success (the ReAct loop ends).
 
 
 > We will implement a simple ReAct loop 'manually' later.
+
 ---
 
 # Predefined Tools (in the Prompt)
@@ -246,6 +240,9 @@ Saving Context with **Progressive disclosure**:
 - Level 3: Other files like `FORMS.md` and `REFERENCE.md` are loaded on demand.
 
 ---
+layout: center
+---
+
 # Demo Time
 
 ---
@@ -272,7 +269,9 @@ Inside CLI (claude, gemini)
 ```
 Give me a recipe of new york cheesecake.
 ```
+
 ---
+
 # Demo: email_router
 
 - [github.com/oduerr/skills_private/.../email_router](https://github.com/oduerr/skills_private/tree/main/skills/email-router)
@@ -301,7 +300,6 @@ Lies die E-Mail und bestimme die Kategorie:
 <!-- Live demo -->
 
 ---
-
 
 # Demo: htwg-mail
 
@@ -344,11 +342,14 @@ The LLM figured out the database schema on its own and wrote optimized SQL — b
 Let's look at the output using `claude-devtools`:
 
 ---
-<!-- _footer: '' -->
+layout: center
+---
+
 ![HTWG Mail Query Output](imgs/emails_getting_total_num.png)
 
 
 --- 
+
 # The Power of the Shell
 ### (with demos)
 
@@ -385,7 +386,7 @@ echo "What is 'Hello Guys' in Chinese and Italian" | gemini
 ```
 
 ```bash
-echo "What is 'Hello Guys' in Chinese and Italian" \
+echo "What is 'Hello Guys' in Chinese and Italian" 
   | gemini --model gemini-2.5-flash
 ```
 
@@ -396,7 +397,7 @@ Pipe text directly into an LLM — just like any other Unix tool.
 # Piping Across LLMs
 
 ```bash
-gemini -p "Is this a good recipe?" < schwaebischer_kartoffelsalat.md \
+gemini -p "Is this a good recipe?" < schwaebischer_kartoffelsalat.md 
   | claude -p "Übersetze ins Deutsche"
 ```
 
@@ -429,7 +430,9 @@ See: [github.com/slds-lmu/ai-scaffolding/.../council-of-bots](https://github.com
 
 ---
 
-<!-- # Tracing
+<div v-if="false">
+
+## Tracing
 
 Observability for CLI agents — seeing what the LLM actually does.
 
@@ -441,9 +444,9 @@ Observability for CLI agents — seeing what the LLM actually does.
 > **Future direction**: OpenTelemetry integration + dedicated visualizers
 > would make agent tracing much more usable.
 
---- -->
+</div>
 
-
+---
 
 ## Manuel Implementation of an Agent (Showing the ReAct Loop)
 
@@ -458,7 +461,7 @@ https://github.com/oduerr/skills_private/blob/main/mini-agents/email-agent.py
 ---
 
 ## Key components: definition of a (virtual) tool for the LLM
-<!-- _footer: '' -->
+
 ```python
 TOOLS = [
     {
@@ -495,8 +498,11 @@ Composing the first message:
 skill_md = SKILL_MD.read_text() # "Du bist Oliver Dürrs persönlicher E-Mail-Assistent. "
 history = [{"role": "system", "content": skill_md}]
 
-mail_text = "Sehr geehrter Herr Dürr, \n Hiermit bitte ich Sie, nachfolgend meines..."
-user_message = f"Beantworte diese Mail:\n\n{mail_text}"
+mail_text = "Sehr geehrter Herr Dürr, 
+ Hiermit bitte ich Sie, nachfolgend meines..."
+user_message = f"Beantworte diese Mail:
+
+{mail_text}"
 history.append({"role": "user", "content": user_message})
 ```
 
@@ -542,6 +548,9 @@ while True:
 
 
 ---
+layout: cover
+---
+
 # Thank You
 
 **Oliver Dürr** 

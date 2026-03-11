@@ -61,3 +61,12 @@ R/to_docs/ki_handout/ki_2023_handout_files/*
 R/to_docs/ki_handout/SCM.fdb_latexmk
 *.fls
 *.log
+R/to_docs/2026_skills/slidev/components/Counter.vue
+R/to_docs/2026_skills/slidev/.npmrc
+R/to_docs/2026_skills/slidev/netlify.toml
+R/to_docs/2026_skills/slidev/package.json
+R/to_docs/2026_skills/slidev/pnpm-lock.yaml
+R/to_docs/2026_skills/slidev/README.md
+R/to_docs/2026_skills/slidev/skills-lock.json
+R/to_docs/2026_skills/slidev/snippets/external.ts
+R/to_docs/2026_skills/slidev/vercel.json
