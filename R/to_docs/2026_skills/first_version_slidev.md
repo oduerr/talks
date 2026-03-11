@@ -7,6 +7,7 @@
   blockquote { border-left: 4px solid #2d5986; padding-left: 1em; color: #555; }
 </style>
 
+
 # CLI Agents, Skills & the Return of the Shell
 **Oliver Dürr**
 <!-- HTWG Konstanz / TIDIT.ch -->
@@ -26,30 +27,12 @@
 | **Claude Opus 4.5** | Anthropic | $5.00 | $0.50 | $25.00 | **80.9%** |
 | **Gemini 3.1 Pro** | Google | $2.00 | ~$0.20 | $12.00 | 80.6% |
 | **GPT-5.2** | OpenAI | $1.75 | — | $14.00 | 80.0% |
-| Claude Sonnet 4.6 | Anthropic | $3.00 | $0.30 | $15.00 | 79.6% |
-| Claude Haiku 4.5 | Anthropic | $1.00 | $0.10 | $5.00 | — |
-| GPT-5 mini | OpenAI | $0.25 | $0.025 | $2.00 | — |
-| Gemini 2.5 Flash | Google | $0.15 | ~$0.02 | $0.60 | — |
+
+Open Source models
+- Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
 
 SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
 Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
-
----
-
-# LLMs — Open Source / Self-Hosted
-
-| Model | Total Params | Active Params | Suitable Hardware |
-|-------|------------:|-------------:|-------------------|
-| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
-| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
-| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
-| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
-| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
-
-- **MoE** = Mixture of Experts — only a fraction of parameters active per token
-- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
-- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
-- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud
 
 ---
 layout: cover
