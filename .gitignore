@@ -70,3 +70,6 @@ R/to_docs/2026_skills/slidev/README.md
 R/to_docs/2026_skills/slidev/skills-lock.json
 R/to_docs/2026_skills/slidev/snippets/external.ts
 R/to_docs/2026_skills/slidev/vercel.json
+/R/to_docs/2026_skills/.agent
+/R/to_docs/2026_skills/.agents
+/R/to_docs/2026_skills/.claude
