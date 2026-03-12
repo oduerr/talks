@@ -200,6 +200,141 @@ Step 2 and 3 are iterated until success (the ReAct loop ends).
 
 > We will implement a simple ReAct loop 'manually' later.
 
+--- 
+
+# Demo Time: Manual ReAct Loop Implementation
+
+Step throught `tool_usage.py` in https://github.com/oduerr/llm_playground/tree/main/tools_usage
+
+Task = "Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have together?"
+
+model = `qwen2.5:7b-instruct` ✅
+
+model = `qwen2.5:3b-instruct` ⛔️  only manages "What is 5652 + 10272727?"
+
+--- 
+
+# Backup for Demo (Step 1) Prompt send to model
+
+<div class="code-demo-wrap">
+```text {lines:true}
+========== STEP 1 ==========
+=== PROMPT GOING INTO MODEL ===
+<|im_start|>system
+You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
+
+# Tools
+
+You may call one or more functions to assist with the user query.
+
+You are provided with function signatures within <tools></tools> XML tags:
+<tools> 
+{"type": "function", "function": {"name": "add", "description": "Add two numbers", "parameters": {"type": "object", "properties": {"a": {"type": "number"}, "b": {"type": "number"}}, "required": ["a", "b"]}}}
+</tools>
+
+For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:
+<tool_call>
+{"name": <function-name>, "arguments": <args-json-object>}
+</tool_call><|im_end|>
+<|im_start|>user
+Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have together?<|im_end|>
+<|im_start|>assistant
+```
+
+<div class="code-pointer pointer-1" v-click>
+    <span class="fist">👊</span>
+    <span class="label">function definition</span>
+</div>
+
+<div class="code-pointer pointer-2" v-click>
+    <span class="fist">👊</span>
+    <span class="label">the LLM should finish that</span>
+</div>
+</div>
+
+<style scoped>
+.code-demo-wrap {
+    position: relative;
+}
+
+.code-pointer {
+    position: absolute;
+    left: 66%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #2d5986;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    font-size: 0.85rem;
+}
+
+.code-pointer .fist {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.code-pointer.pointer-1 {
+    top: 45%;
+}
+
+.code-pointer.pointer-2 {
+    top: 82%;
+}
+</style>
+
+- **Output from the model:** [Requesting tool call]    add({'a': 5652, 'b': 10272727})
+- Agent runtime executes the tool call and calculates the result: [Result of tool call]    5652 + 10272727 = 10278379
+
+<!-- Sometimes this is also called agent harness -->
+
+--- 
+
+# Backup for Demo (Step 2)
+```
+========== STEP 2 ==========
+=== PROMPT GOING INTO MODEL ===
+<|im_start|>system
+You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
+
+... 
+
+<|im_start|>user
+Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have together?<|im_end|>
+<|im_start|>assistant
+<tool_call>
+{"name": "add", "arguments": "{\"a\":5652,\"b\":10272727}"}
+</tool_call><|im_end|>
+<|im_start|>user
+<tool_call>
+10278379
+</tool_response><|im_end|>
+<|im_start|>assistant
+```
+
+### Output from the model:
+[ANSWER] Tim and Jane have a total of 10,278,379 apples together.
+
+---
+
+# LLMs — Open Source / Self-Hosted
+
+| Model | Total Params | Active Params | Suitable Hardware |
+|-------|------------:|-------------:|-------------------|
+| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
+| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
+| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
+| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
+| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
+
+- **MoE** = Mixture of Experts — only a fraction of parameters active per token
+- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
+- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
+- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud
+
+
 ---
 
 # Predefined Tools (in the Prompt)
