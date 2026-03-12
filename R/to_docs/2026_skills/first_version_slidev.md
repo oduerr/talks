@@ -24,11 +24,12 @@ layout: center
 | May 2025 | **Codex** | OpenAI joins the terminal-agent race [^2] |
 | Jun 2025 | **Gemini CLI** | Google brings an open-source terminal agent [^3] |
 | Oct 2025 | **Anthropic Skills** | Reusable, on-demand workflows [^4] |
-| 2026 | **Codex Skills, Gemini Skills, OpenClaw** | Skills become a cross-tool pattern [^5][^6][^7] |
+
+**2026 Skills now everywhere Codex, Gemini, OpenClaw, Cursor IDE, and VS Code** [^5][^6][^7] |
 
 > **Takeaway:**  
-> The CLI renaissance started in 2025.  
-> **Skills made it extensible.**
+> The CLI renaissance started in 2025. Skills started in Oktober 2025 now March 2026 they are everywhere.  
+
 
 <div style="font-size: 10px; margin-top: 1.2em; opacity: 0.8;">
 [^1]: Anthropic announcement, “Claude 3.7 Sonnet and Claude Code” (Feb 24, 2025) — https://www.anthropic.com/news/claude-3-7-sonnet  
@@ -46,24 +47,6 @@ layout: center
 - https://github.com/mgechev/skills-best-practices
 - https://claude.com/blog/skills-explained (Blog Post introducing Skills)
 - https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
-
----
-
-# LLMs — The Workhorses (API Models)
-
-| Model | Provider | Input $/M | Cached $/M | Output $/M | SWE-bench |
-|-------|----------|----------:|-----------:|-----------:|----------:|
-| **Claude Opus 4.5** | Anthropic | $5.00 | $0.50 | $25.00 | **80.9%** |
-| **Gemini 3.1 Pro** | Google | $2.00 | ~$0.20 | $12.00 | 80.6% |
-| **GPT-5.2** | OpenAI | $1.75 | — | $14.00 | 80.0% |
-
-
-- **Open Source models**
-
-    Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
-
-SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
-Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
 
 ---
 layout: cover
@@ -200,23 +183,87 @@ Step 2 and 3 are iterated until success (the ReAct loop ends).
 
 > We will implement a simple ReAct loop 'manually' later.
 
---- 
+---
 
 # Demo Time: Manual ReAct Loop Implementation
 
-Step throught `tool_usage.py` in https://github.com/oduerr/llm_playground/tree/main/tools_usage
+Let's take the magic out of the black box and implement a simple ReAct loop ourselves.
+
+> Step throught `tool_usage.py` in https://github.com/oduerr/llm_playground/tree/main/tools_usage
+
+
+The Code implements a simple ReAct loop, where the LLM can call a tool (add) to solve the following simple math problem:
 
 Task = "Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have together?"
 
 model = `qwen2.5:7b-instruct` ✅
 
-model = `qwen2.5:3b-instruct` ⛔️  only manages "What is 5652 + 10272727?"
+model = `qwen2.5:3b-instruct` ⛔️  
 
---- 
+The smaller model only manages "What is 5652 + 10272727?"
+
+---
+layout: two-cols-header
+---
+
+# Backup for Demo: The Tool we Announce to the LLM
+
+::left::
+
+**① Define the tool**
+
+```python
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "add",
+            "description": "Add two numbers",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "a": {"type": "number"},
+                    "b": {"type": "number"}
+                },
+                "required": ["a", "b"]
+            }
+        }
+    }
+]
+```
+
+::right::
+
+**② Call the API with the tool**
+
+```python
+
+
+
+TASK = ("Tim has 5652 apples and Jane has "
+        "10272727 apples, how many do they "
+        "have together?")
+
+# Just a single user message, no system prompt
+messages = [{"role": "user", "content": TASK}]
+
+response = client.chat.completions.create(
+    model = "qwen2.5:7b-instruct",
+    messages = messages,
+    tools = tools
+)
+```
+
+<style>
+.two-cols-header {
+  column-gap: 20px; /* Adjust the gap size as needed */
+}
+</style>
+
+---
 
 # Backup for Demo (Step 1) Prompt send to model
 
-<div class="code-demo-wrap">
 ```text {lines:true}
 ========== STEP 1 ==========
 === PROMPT GOING INTO MODEL ===
@@ -234,63 +281,19 @@ You are provided with function signatures within <tools></tools> XML tags:
 
 For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:
 <tool_call>
-{"name": <function-name>, "arguments": <args-json-object>}
+{"name": &lt;function-name&gt;, "arguments": &lt;args-json-object&gt;}
 </tool_call><|im_end|>
 <|im_start|>user
 Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have together?<|im_end|>
 <|im_start|>assistant
 ```
 
-<div class="code-pointer pointer-1" v-click>
-    <span class="fist">👊</span>
-    <span class="label">function definition</span>
-</div>
-
-<div class="code-pointer pointer-2" v-click>
-    <span class="fist">👊</span>
-    <span class="label">the LLM should finish that</span>
-</div>
-</div>
-
-<style scoped>
-.code-demo-wrap {
-    position: relative;
-}
-
-.code-pointer {
-    position: absolute;
-    left: 66%;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid #2d5986;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    font-size: 0.85rem;
-}
-
-.code-pointer .fist {
-    font-size: 1.1rem;
-    line-height: 1;
-}
-
-.code-pointer.pointer-1 {
-    top: 45%;
-}
-
-.code-pointer.pointer-2 {
-    top: 82%;
-}
-</style>
-
 - **Output from the model:** [Requesting tool call]    add({'a': 5652, 'b': 10272727})
 - Agent runtime executes the tool call and calculates the result: [Result of tool call]    5652 + 10272727 = 10278379
 
-<!-- Sometimes this is also called agent harness -->
+<!-- Sometimes Agent Runtime is also called agent harness. Note tool definition at line 12 and the last line where agent takes over. A simple system prompt is added by the model -->
 
---- 
+---
 
 # Backup for Demo (Step 2)
 ```
@@ -317,30 +320,29 @@ Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have t
 ### Output from the model:
 [ANSWER] Tim and Jane have a total of 10,278,379 apples together.
 
+<!-- Now the LLM takes over again and this time did not call a loop but provide the answer in one sentence -->
+
 ---
 
-# LLMs — Open Source / Self-Hosted
+# Berkeley's Gorilla LLM Leaderboard
 
-| Model | Total Params | Active Params | Suitable Hardware |
-|-------|------------:|-------------:|-------------------|
-| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
-| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
-| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
-| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
-| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
+**scroll down!** and search for
+```
+qwen
+```
 
-- **MoE** = Mixture of Experts — only a fraction of parameters active per token
-- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
-- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
-- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud
-
+<iframe 
+  src="https://gorilla.cs.berkeley.edu/leaderboard.html" 
+  width="100%" 
+  height="500px" 
+  frameborder="0" 
+/>
 
 ---
 
 # Predefined Tools (in the Prompt)
 
-<!-- Screenshot will be provided (Roo Code tools, from old slides) -->
-
+- The simplest way is to define a fixed set of tools directly in the prompt
 - IDE integrations started with this approach
 - A set of predefined tools, registered completely in the **initial prompt**
     - Example: Roo Code uses ~50K tokens just for tool definitions
@@ -374,7 +376,9 @@ Token efficiency: Only the relevant parts are loaded into context — saves toke
 # Skills
 
 - Introduced October 2025 with **Claude Code**
-- Now included in other CLIs (gemini, codex)
+    - Now included in other CLIs (gemini, codex)
+    - Also in openClaw 🦞 (2026) 
+    - And (very recently) in Cursor and the GitHub Plugin to VS Code
 - A way to extend CLI capabilities and adapt them to your needs
 - Simple **Markdown files** 
     - Describe desired behaviour
@@ -623,7 +627,7 @@ Agent  →  Skill (optional)  →  CLI tool  →  Result
 layout: cover
 ---
 
-## Manuel Implementation of an Simple Agent 
+## Manuel Implementation of an Simple Agent (If Time Permits)
 
 ---
 
@@ -722,17 +726,56 @@ while True:
 layout: cover
 ---
 
-# Thank You
+# Exercise
 
-**Oliver Dürr** 
+---
+
+# Exercise: Verify a Causal Claim with a CLI Agent
+
+The file `causal_data.csv` contains three variables: A, B, and C.
+Someone claims that **B is a cause of C**.
+
+The data is available at:
+```
+https://raw.githubusercontent.com/oduerr/llm_playground/refs/heads/main/cli/causal_data.csv
+```
+
+Write a prompt for a CLI agent (Claude Code, Gemini CLI, etc.) that downloads
+the data and evaluates whether the claim is justified.
+
+---
+
+# Exercise Solution (Example Prompt)
+
+```text 
+You are an expert in statistics and causal inference.
+You will a datafile with three variables: A, B, and C. Your task is to reason carefully about causality — not just correlation. 
+Think step by step. Consider alternative causal explanations before concluding. Look at the provided data.
+
+Name of the data file: causal_data.csv
+Claim C is causaliy realated to B.
+
+The data is available at: https://raw.githubusercontent.com/oduerr/llm_playground/refs/heads/main/cli/causal_data.csv
+
+Please first download the data and then reason about the claim. 
+Finally, provide a conclusion on whether the data supports the claim or not.
+
+```
 
 
 ---
 layout: cover
 ---
 
-# Attick
+# Thank You
 
+**Oliver Dürr** 
+
+---
+layout: cover
+---
+
+# Attick
 
 ---
 
@@ -747,3 +790,37 @@ Observability for CLI agents — seeing what the LLM actually does.
 
 > **Future direction**: OpenTelemetry integration + dedicated visualizers
 > would make agent tracing much more usable.
+
+---
+
+# LLMs — Open Source / Self-Hosted
+
+| Model | Total Params | Active Params | Suitable Hardware |
+|-------|------------:|-------------:|-------------------|
+| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
+| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
+| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
+| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
+| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
+
+- **MoE** = Mixture of Experts — only a fraction of parameters active per token
+- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
+- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
+- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud 
+---
+
+# LLMs — The Workhorses (API Models)
+
+| Model | Provider | Input $/M | Cached $/M | Output $/M | SWE-bench |
+|-------|----------|----------:|-----------:|-----------:|----------:|
+| **Claude Opus 4.5** | Anthropic | $5.00 | $0.50 | $25.00 | **80.9%** |
+| **Gemini 3.1 Pro** | Google | $2.00 | ~$0.20 | $12.00 | 80.6% |
+| **GPT-5.2** | OpenAI | $1.75 | — | $14.00 | 80.0% |
+
+
+- **Open Source models**
+
+    Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
+
+SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
+Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
