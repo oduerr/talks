@@ -1,0 +1,5 @@
+{
+    "slidev.include": [
+        "first_version_slidev.md"
+    ]
+}

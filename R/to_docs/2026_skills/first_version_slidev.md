@@ -101,7 +101,7 @@ layout: cover
 
 # Level 2 — Command Line Interfaces 
 ### CLIs
-![Gemini CLI](./imgs/claude.webp){height=100}
+![Gemini CLI](./imgs/claude.webp)
 
 ---
 
@@ -123,12 +123,23 @@ layout: cover
 - CLIs feel more natural for **non-coding tasks** (can still do coding too)
 - CLIs seem to be the LLM providers' answer to Cursor & GitHub Copilot
 
+--- 
+
+#  Working in a directory
+
+- Designed for for code (a directory with files), but also works for other tasks
+- Files in directory naturally provide the context. Reading and writing is permitted in the directory. 
+- You can add addition directories 
+    - with `claude --add-dir /path/to/dir` or
+    - with `/AddDir /path/to/dir` inside the conversation
+
+
 ---
 layout: image-right
 image: https://upload.wikimedia.org/wikipedia/commons/9/99/DEC_VT100_terminal.jpg
 ---
 
-# The Power of the Shell
+#  The Power of the Shell
 
 The shell — since the 1970s.
 Works on Linux, macOS, Windows (PowerShell).
@@ -326,17 +337,16 @@ Tim has 5652 apples and Jane has 10272727 apples, how many apples do they have t
 
 # Berkeley's Gorilla LLM Leaderboard
 
-**scroll down!** and search for
 ```
 qwen
 ```
+Website https://gorilla.cs.berkeley.edu/leaderboard.html
 
-<iframe 
-  src="https://gorilla.cs.berkeley.edu/leaderboard.html" 
-  width="100%" 
-  height="500px" 
-  frameborder="0" 
-/>
+
+
+
+
+
 
 ---
 
@@ -354,22 +364,12 @@ qwen
 
 # MCP Servers
 
-**TODO** Nicer Slide
-**Model Context Protocol** — a standard to extend LLM capabilities.
-
-```
-┌──────────────┐     MCP (JSON-RPC)     ┌────────────────┐
-│  LLM Client  │◄──────────────────────►│   MCP Server   │
-│  (Claude,    │                        │  (DB, API, …)  │
-│   Cursor, …) │                        └────────────────┘
-└──────────────┘
-```
+![Model Context Protocol diagram](./imgs/mcp.png)
 
 - MCP servers expose **tools**, **resources**, and **prompts** to the LLM
 - Adopted by Claude Code, Cursor, Windsurf, and others
 - Decouples tool implementation from the LLM client
-
-Token efficiency: Only the relevant parts are loaded into context — saves tokens.
+- Token efficient: only relevant parts loaded into context
 
 ---
 
@@ -389,6 +389,20 @@ Token efficiency: Only the relevant parts are loaded into context — saves toke
 - Token efficient via **progressive disclosure** — only loaded when needed
 
 
+
+---
+
+# Skills vs MCP Servers and other stuff
+
+from: https://claude.com/blog/skills-explained
+
+| Feature | **Skills** | **MCP** | Prompts | Projects | Subagents |
+|---|---|---|---|---|---|
+| What it provides | Procedural knowledge | Tool connectivity | Moment-to-moment instructions | Background knowledge | Task delegation |
+| Contains | Instructions + code + assets | Tool definitions | Natural language | Documents + context | Full agent logic |
+| When it loads | Dynamically, as needed | Always available | Each turn | Always in project | When invoked |
+| Can include code | Yes | Yes | No | No | Yes |
+| Best for | Specialized expertise | Data access | Quick requests | Centralized context | Specialized tasks |
 
 ---
 
@@ -623,6 +637,178 @@ Agent  →  Skill (optional)  →  CLI tool  →  Result
 - Use `claude-devtools` to inspect the output of the claude code.
 
 
+---
+layout: cover
+---
+
+# Exercise
+
+---
+
+# Exercise: Verify a Causal Claim with a CLI Agent
+
+The file `causal_data.csv` contains three variables: A, B, and C.
+Someone claims that **B is a cause of C**.
+
+The data is available at:
+```
+https://raw.githubusercontent.com/oduerr/llm_playground/refs/heads/main/cli/causal_data.csv
+```
+
+Write a prompt for a CLI agent (Claude Code, Gemini CLI, etc.) that downloads
+the data and evaluates whether the claim is justified.
+
+---
+
+# Exercise Solution 
+
+```text 
+You are an expert in statistics and causal inference.
+You will a datafile with three variables: A, B, and C. Your task is to reason carefully about causality — not just correlation. 
+Think step by step. Consider alternative causal explanations before concluding. Look at the provided data.
+
+Name of the data file: causal_data.csv
+Claim C is causaliy realated to B.
+
+The data is available at: https://raw.githubusercontent.com/oduerr/llm_playground/refs/heads/main/cli/causal_data.csv
+
+Please first download the data and then reason about the claim. 
+Finally, provide a conclusion on whether the data supports the claim or not.
+
+```
+
+---
+
+# Result
+
+```markdown
+ Step 4 — Causal Structure Inference
+
+  The data pattern is the textbook signature of a fork (common cause) structure:
+
+  B ← A → C
+
+  - A causes B (with coefficient ≈ 2)
+  - A causes C (with coefficient ≈ 3)
+  - B and C are spuriously correlated through A
+  - B and C have no direct causal link in either direction
+
+  Alternative structures ruled out:
+  - A → B → C: would require corr(B,C|A) > 0 (it is ~0)
+  - C → B (direct): would require C to explain B residuals after A (it does not; coefficient = −0.02)
+  - B → C (direct): same argument — B has zero partial effect on C
+
+  ---
+  Conclusion
+
+  The data does NOT support the claim that C is causally related to B.
+
+  The strong observed correlation between B and C is entirely a confounding artifact driven by A, which is a common cause of both. Conditioning on A
+  renders B and C independent (partial correlation ≈ 0.00). There is no evidence of any direct causal pathway between C and B in either direction.
+```
+
+---
+layout: two-cols-header
+---
+
+# Food for thought: an MD File doing Research
+
+If time permits, we can also look at Andrej Karpathy's `autoresearch` project, which is an MD file that implements a full research workflow.
+
+::left::
+- [https://github.com/karpathy/autoresearch](https://github.com/karpathy/autoresearch)
+- Simply spin up your Claude/Codex or whatever you want in this repo (and disable all permissions), then you can prompt something like:
+```text
+Hi have a look at program.md and let's kick off a new experiment! let's do the setup first.
+```
+
+The program.md file is essentially a super lightweight "skill". The agent modifies the python code in 'train.py' to run an experiment (including commiting the code changes to git)
+
+
+::right::
+![alt text](https://raw.githubusercontent.com/karpathy/autoresearch/master/progress.png)
+
+
+--- 
+
+# Technical Things
+
+- Cheat Sheet for skills: https://github.com/Njengah/claude-code-cheat-sheet 
+- Of special interest: 
+    - `claude --resume` reloads a previous conversation (you can give a name to the conversion by chatting)
+    -   
+
+
+---
+layout: cover
+---
+
+# Thank You
+
+**Oliver Dürr** 
+
+---
+layout: cover
+---
+
+# Attick
+
+---
+
+# Sometime even w/o skills
+
+Animation 
+
+
+---
+
+## Tracing
+
+Observability for CLI agents — seeing what the LLM actually does.
+
+- **Claude Code**: see [Simon Willison's writeup](https://simonwillison.net/2025/Jun/2/claude-trace/)
+  Unfortunately broken in newer Claude versions.
+- **Gemini CLI**: [telemetry docs](https://google-gemini.github.io/gemini-cli/docs/cli/telemetry.html)
+  JSON dump available, but not very readable.
+
+> **Future direction**: OpenTelemetry integration + dedicated visualizers
+> would make agent tracing much more usable.
+
+---
+
+# LLMs — The Workhorses (API Models)
+
+| Model | Provider | Input $/M | Cached $/M | Output $/M | SWE-bench |
+|-------|----------|----------:|-----------:|-----------:|----------:|
+| **Claude Opus 4.5** | Anthropic | $5.00 | $0.50 | $25.00 | **80.9%** |
+| **Gemini 3.1 Pro** | Google | $2.00 | ~$0.20 | $12.00 | 80.6% |
+| **GPT-5.2** | OpenAI | $1.75 | — | $14.00 | 80.0% |
+
+
+- **Open Source models**
+
+    Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
+
+SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
+Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
+
+---
+
+# LLMs — Open Source / Self-Hosted
+
+| Model | Total Params | Active Params | Suitable Hardware |
+|-------|------------:|-------------:|-------------------|
+| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
+| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
+| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
+| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
+| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
+
+- **MoE** = Mixture of Experts — only a fraction of parameters active per token
+- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
+- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
+- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud
+
 --- 
 layout: cover
 ---
@@ -722,105 +908,3 @@ while True:
                     "content": result
                 })
 ```
----
-layout: cover
----
-
-# Exercise
-
----
-
-# Exercise: Verify a Causal Claim with a CLI Agent
-
-The file `causal_data.csv` contains three variables: A, B, and C.
-Someone claims that **B is a cause of C**.
-
-The data is available at:
-```
-https://raw.githubusercontent.com/oduerr/llm_playground/refs/heads/main/cli/causal_data.csv
-```
-
-Write a prompt for a CLI agent (Claude Code, Gemini CLI, etc.) that downloads
-the data and evaluates whether the claim is justified.
-
----
-
-# Exercise Solution (Example Prompt)
-
-```text 
-You are an expert in statistics and causal inference.
-You will a datafile with three variables: A, B, and C. Your task is to reason carefully about causality — not just correlation. 
-Think step by step. Consider alternative causal explanations before concluding. Look at the provided data.
-
-Name of the data file: causal_data.csv
-Claim C is causaliy realated to B.
-
-The data is available at: https://raw.githubusercontent.com/oduerr/llm_playground/refs/heads/main/cli/causal_data.csv
-
-Please first download the data and then reason about the claim. 
-Finally, provide a conclusion on whether the data supports the claim or not.
-
-```
-
-
----
-layout: cover
----
-
-# Thank You
-
-**Oliver Dürr** 
-
----
-layout: cover
----
-
-# Attick
-
----
-
-## Tracing
-
-Observability for CLI agents — seeing what the LLM actually does.
-
-- **Claude Code**: see [Simon Willison's writeup](https://simonwillison.net/2025/Jun/2/claude-trace/)
-  Unfortunately broken in newer Claude versions.
-- **Gemini CLI**: [telemetry docs](https://google-gemini.github.io/gemini-cli/docs/cli/telemetry.html)
-  JSON dump available, but not very readable.
-
-> **Future direction**: OpenTelemetry integration + dedicated visualizers
-> would make agent tracing much more usable.
-
----
-
-# LLMs — Open Source / Self-Hosted
-
-| Model | Total Params | Active Params | Suitable Hardware |
-|-------|------------:|-------------:|-------------------|
-| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
-| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
-| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
-| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
-| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
-
-- **MoE** = Mixture of Experts — only a fraction of parameters active per token
-- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
-- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
-- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud 
----
-
-# LLMs — The Workhorses (API Models)
-
-| Model | Provider | Input $/M | Cached $/M | Output $/M | SWE-bench |
-|-------|----------|----------:|-----------:|-----------:|----------:|
-| **Claude Opus 4.5** | Anthropic | $5.00 | $0.50 | $25.00 | **80.9%** |
-| **Gemini 3.1 Pro** | Google | $2.00 | ~$0.20 | $12.00 | 80.6% |
-| **GPT-5.2** | OpenAI | $1.75 | — | $14.00 | 80.0% |
-
-
-- **Open Source models**
-
-    Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G)
-
-SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
-Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
