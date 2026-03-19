@@ -13,6 +13,19 @@
 <!-- HTWG Konstanz / TIDIT.ch -->
 
 ---
+
+# Talk Overview
+
+1. **Modes of Interaction** — from chat to agentic CLI
+   - Level 1: Chat interfaces
+   - Level 2: AI coding IDEs & CLIs
+   - Level 3: Hosted agents
+2. **How it works** — tool calling, and the agentic loop
+3. **Skills** — reusable, on-demand workflows
+4. **Live demos** — easy_chef, email_router, htwg-mail
+5. **Exercise** — verify a causal claim with a CLI agent
+
+---
 layout: center
 ---
 
@@ -99,9 +112,15 @@ layout: cover
 
 ---
 
-# Level 2 — Command Line Interfaces 
-### CLIs
-![Gemini CLI](./imgs/claude.webp)
+# Level 2 — Command Line Interfaces (CLI)
+### Interact with AI in Shell 
+```text
+claude
+```
+
+<img src="./imgs/claude_code.png" style="height: 80%"/>
+
+<!-- As Kadir said, the AI understands me -->
 
 ---
 
@@ -129,10 +148,12 @@ layout: cover
 
 - Designed for for code (a directory with files), but also works for other tasks
 - Files in directory naturally provide the context. Reading and writing is permitted in the directory. 
-- You can add addition directories 
-    - with `claude --add-dir /path/to/dir` or
-    - with `/AddDir /path/to/dir` inside the conversation
+- You can add addition directories with `claude --add-dir /path/to/dir` or with `/AddDir /path/to/dir` inside the conversation
+- `Create pngs for all images in the directory and name them accoring to their content.` 
 
+<img src="./imgs/cats_and_dogs.png" style="height: 60%"/>
+
+<!-- Beispiel könnte man all Fakultäsratsbeschlüsse in einem Verzeichnis speichern und dann den LLM fragen -->
 
 ---
 layout: image-right
@@ -192,7 +213,7 @@ Step 2 and 3 are iterated until success (the ReAct loop ends).
 ![ReAct Loop Illustration](./imgs/react_from_bbs25.png)
 
 
-> We will implement a simple ReAct loop 'manually' later.
+> We will now implement a simple ReAct loop 'manually' ...
 
 ---
 
@@ -364,13 +385,14 @@ Website https://gorilla.cs.berkeley.edu/leaderboard.html
 
 # MCP Servers
 
-![Model Context Protocol diagram](./imgs/mcp.png)
+<img src="./imgs/mcp.png" style="center; height: 60%"/>
 
 - MCP servers expose **tools**, **resources**, and **prompts** to the LLM
 - Adopted by Claude Code, Cursor, Windsurf, and others
 - Decouples tool implementation from the LLM client
 - Token efficient: only relevant parts loaded into context
 
+Taken from https://claude.com/blog/skills-explained
 ---
 
 # Skills
@@ -396,13 +418,13 @@ Website https://gorilla.cs.berkeley.edu/leaderboard.html
 
 from: https://claude.com/blog/skills-explained
 
-| Feature | **Skills** | **MCP** | Prompts | Projects | Subagents |
-|---|---|---|---|---|---|
-| What it provides | Procedural knowledge | Tool connectivity | Moment-to-moment instructions | Background knowledge | Task delegation |
-| Contains | Instructions + code + assets | Tool definitions | Natural language | Documents + context | Full agent logic |
-| When it loads | Dynamically, as needed | Always available | Each turn | Always in project | When invoked |
-| Can include code | Yes | Yes | No | No | Yes |
-| Best for | Specialized expertise | Data access | Quick requests | Centralized context | Specialized tasks |
+| Feature | **Skills** | MCP | Subagents |
+|---|---|---|---|
+| What it provides | Procedural knowledge | Tool connectivity | Task delegation |
+| Contains | Instructions + code + assets | Tool definitions | Full agent logic |
+| When it loads | Dynamically, as needed | Always available | When invoked |
+| Can include code | Yes | Yes | Yes |
+| Best for | Specialized expertise | Data access | Specialized tasks |
 
 ---
 
@@ -544,7 +566,7 @@ See: [github.com/slds-lmu/ai-scaffolding/.../council-of-bots](https://github.com
 layout: image-right
 image: https://upload.wikimedia.org/wikipedia/commons/9/99/DEC_VT100_terminal.jpg
 ---
-# The Power of the Shell (In the 80s)?
+# The Power of the Shell (In the 80s)
 
 ```bash
 echo "Hello, World" | wc -c

@@ -10,17 +10,17 @@ A collection of public conference talks by Oliver Dürr, primarily on AI agents,
 
 There are two presentation stacks in use:
 
-**Slidev** (current — `2026_skills/`):
+**Slidev** (current — `src/slidev/2026_skills/`):
 - Source: `first_version_slidev.md` (Markdown with Slidev frontmatter and layout directives)
-- Dev server: `cd R/to_docs/2026_skills && npx slidev first_version_slidev.md`
-- Build/export: `cd R/to_docs/2026_skills && npx slidev build first_version_slidev.md`
+- Dev server: `cd src/slidev/2026_skills && npx slidev first_version_slidev.md`
+- Build/export: `cd src/slidev/2026_skills && npx slidev build first_version_slidev.md`
 - The VSCode Slidev extension uses `.vscode/settings.json` to register the source file
 - Images live in `./imgs/` relative to the source file
 
-**Quarto + Reveal.js** (older talks — `2025_agents/`, `interactive/`, `ki_2023/`):
+**Quarto + Reveal.js** (older talks — `src/quarto/`):
 - Source: `.qmd` files with `format: revealjs` YAML header
 - Render: `quarto render <file>.qmd`
-- Shared theme: `R/to_docs/shared_stuff/oliver_slides.scss`
+- Shared theme: `src/quarto/shared_stuff/oliver_slides.scss`
 
 **LaTeX** (`ki_handout/`):
 - Handout materials rendered with pdfLaTeX via RStudio
@@ -28,13 +28,15 @@ There are two presentation stacks in use:
 ## Directory Layout
 
 ```
-R/to_docs/
-├── 2026_skills/        # Current talk: "CLI Agents, Skills & the Return of the Shell" (Slidev)
-├── 2025_agents/        # Earlier talk: "Groking Agents" (Quarto/Reveal.js)
-├── interactive/        # Interactive Reveal.js demo
-├── ki_2023/            # KI 2023 conference talk (Quarto/Reveal.js)
-├── ki_handout/         # KI 2023 handout (LaTeX)
-└── shared_stuff/       # Shared SCSS theme, logos, images
+src/
+├── slidev/
+│   └── 2026_skills/    # Current talk: "CLI Agents, Skills & the Return of the Shell"
+└── quarto/
+    ├── 2025_agents/    # "Groking Agents" (Quarto/Reveal.js)
+    ├── interactive/    # Interactive Reveal.js demo
+    ├── ki_2023/        # KI 2023 conference talk (Quarto/Reveal.js)
+    ├── ki_handout/     # KI 2023 handout (LaTeX)
+    └── shared_stuff/   # Shared SCSS theme, logos, images
 docs/                   # Generated static site (GitHub Pages output)
 ```
 
