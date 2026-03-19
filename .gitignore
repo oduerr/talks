@@ -48,6 +48,7 @@ src/quarto/ki_handout/images/*
 src/quarto/ki_handout/ki_2023_handout_files/*
 *.DS_Store
 *.html
+!docs/*.html
 *.aux
 src/quarto/ki_handout/SCM.fdb_latexmk
 *.fls

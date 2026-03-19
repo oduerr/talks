@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-A collection of public conference talks by Oliver Dürr, primarily on AI agents, LLMs, and related topics. Presentations are stored in `R/to_docs/` and rendered to `docs/` for GitHub Pages hosting.
+A collection of public conference talks by Oliver Dürr, primarily on AI agents, LLMs, and related topics. Presentations are stored in `src/` and rendered to `docs/` for GitHub Pages hosting.
 
 ## Presentation Technologies
 
