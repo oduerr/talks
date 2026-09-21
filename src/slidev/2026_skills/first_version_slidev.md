@@ -5,6 +5,7 @@
   .cover h1 { font-size: 48px; color: #1a3a5c; }
   .cover { text-align: center; }
   blockquote { border-left: 4px solid #2d5986; padding-left: 1em; color: #555; }
+  .two-cols-header { column-gap: 20px; }
 </style>
 
 
@@ -23,7 +24,7 @@
 2. **How it works** — tool calling, and the agentic loop
 3. **Skills** — reusable, on-demand workflows
 4. **Live demos** — easy_chef, email_router, htwg-mail
-5. **Exercise** — verify a causal claim with a CLI agent
+5. **Exercise** 
 
 ---
 layout: center
@@ -286,12 +287,6 @@ response = client.chat.completions.create(
 )
 ```
 
-<style>
-.two-cols-header {
-  column-gap: 20px; /* Adjust the gap size as needed */
-}
-</style>
-
 ---
 
 # Backup for Demo (Step 1) Prompt send to model
@@ -543,12 +538,6 @@ The LLM figured out the database schema on its own and wrote optimized SQL — b
 Let's look at the output using `claude-devtools`:
 
 ---
-layout: center
----
-
-![HTWG Mail Query Output](./imgs/emails_getting_total_num.png)
-
----
 
 # A Skill Can Spawn Other CLIs
 
@@ -776,10 +765,84 @@ layout: cover
 # Attick
 
 ---
+layout: two-cols-header
+---
 
-# Sometime even w/o skills
+# Preferences and Permissions (Claude Code)
 
-Animation 
+::left::
+### Locations
+
+```text
+# global user permissions/prefs
+~/.claude/
+  settings.json      # global permissions
+  CLAUDE.md          # global memory/instructions
+
+your-project/
+  .claude/
+    settings.json        # project permissions (usually in git)
+    settings.local.json  # local permissions (usally gitignored)
+    CLAUDE.md            # project-specific memory
+
+local overrides  →  project  →  global
+```
+::right::
+
+```json
+#~/claude/settings.json
+{
+  "permissions": {
+    "deny": ["Bash(*)"], #<-- No bash commands allowed
+    "allow": [
+      "Bash(find:*)",  #Except find, grep and ls 
+      "Bash(grep:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}
+```
+
+```json
+# your-project/.claude/settings.json
+{
+  "permissions": {
+    "allow": [
+      "Read(~/project/**)", #Trust (no prompt injection)
+      "Write(~/project/claude_output/**)",
+      "Edit(~/project/claude_output/**)"
+    ]
+  }
+}
+```
+
+<!-- Note that the permissions for Gemini are different. It doesn't use JSON but a toml file. -->
+
+---
+
+# Example
+
+```
+> claude -p 'Welche Emails kamen am schmotzigen Dunstig 2022 an?'
+Am schmotzigen Donnerstag, 24. Februar 2022** kamen folgende 10 E-Mails an
+```
+
+- Works with the global permissions, no bash needed all. Just the skill 'email_query'.
+
+- Schmotzigen Donnerstag (sik) is in the 'weights' of a clever LLM no tools needed.
+
+
+A request not possible with the tool.
+```
+claude -p 'Wie viele Emails hast Du in der Datenbank?' --debug-file test.txt
+Jede Zeile im Output hat 3 Zeilen (Datum, Snippet, Link). Mit 114111 Zeilen total, abzüglich Header (4 Zeilen) und Trennlinien:
+
+(114111 - 4) / 3 ≈ **38.035 Emails**
+
+Das ist jedoch eine Schätzung. Lass mich die genaue Zahl direkt aus der DB holen — dazu müsste ich den DB-Pfad kennen. Die Ausgabe zeigt keine Gesamtanzahl an. Basierend auf der Zeilenanzahl des vollständigen Outputs sind es ungefähr **~38.000 Emails** in der Datenbank.
+```
+
+- Does not work with global permissions, would need to call it interactively and allow it to read the database file and use sqlite for it.
 
 
 ---
@@ -813,23 +876,6 @@ Observability for CLI agents — seeing what the LLM actually does.
 
 SWE-bench Verified (500 human-validated problems). Prices as of Mar 2026.
 Sources: [OpenAI](https://openai.com/api/pricing/) · [Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) · [Google](https://ai.google.dev/gemini-api/docs/pricing) · [SWE-bench](https://www.swebench.com)
-
----
-
-# LLMs — Open Source / Self-Hosted
-
-| Model | Total Params | Active Params | Suitable Hardware |
-|-------|------------:|-------------:|-------------------|
-| DeepSeek R1 14B | 14B | 14B | Laptop (16 GB) |
-| Qwen 3.5-35B (MoE) | 35B | 3B | Laptop (16 GB), Mac Mini 32G |
-| DeepSeek R1 32B | 32B | 32B | Mac Mini 32G |
-| Llama 3.3 70B | 70B | 70B | DGX Spark (128G) |
-| Qwen 3.5-122B (MoE) | 122B | 10B | DGX Spark (128G) |
-
-- **MoE** = Mixture of Experts — only a fraction of parameters active per token
-- **NVIDIA DGX Spark**: 128 GB unified memory, Grace Blackwell chip
-- Inference via **Ollama**, **llama.cpp**, or **vLLM** (GGUF quantized)
-- Self-hosted: data stays local, ~20 ms latency on LAN vs 250–800 ms cloud
 
 --- 
 layout: cover
