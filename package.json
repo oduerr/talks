@@ -1,0 +1,10 @@
+{
+  "name": "talks",
+  "private": true,
+  "description": "Shared Slidev toolchain for all talks in src/slidev/*",
+  "devDependencies": {
+    "@slidev/cli": "^53.0.0",
+    "@slidev/theme-default": "^0.25.0",
+    "@slidev/theme-seriph": "^0.25.0"
+  }
+}

@@ -48,7 +48,9 @@ src/quarto/ki_handout/images/*
 src/quarto/ki_handout/ki_2023_handout_files/*
 *.DS_Store
 *.html
-!docs/*.html
+# docs/ is the GitHub Pages root and must be committed, including the
+# subdirectories produced by Slidev builds (docs/<talk>/index.html).
+!docs/**/*.html
 *.aux
 src/quarto/ki_handout/SCM.fdb_latexmk
 *.fls
@@ -65,3 +67,7 @@ src/slidev/2026_skills/slidev/vercel.json
 /src/slidev/2026_skills/.agent
 /src/slidev/2026_skills/.agents
 /src/slidev/2026_skills/.claude
+
+# Shared Slidev toolchain (one install for all talks)
+node_modules/
+package-lock.json

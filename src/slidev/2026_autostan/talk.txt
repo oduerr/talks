@@ -1,0 +1,35 @@
+
+# Create a talk about the paper. The talk will be given in front of people who have some math / technical knowledge but not so much statistic knowledge. Expand on thing I indicated e.g. with []. From the technical side we'll use SlideF you should have a skill for that. Do not install everything, I just want to have the markdown file Call the file talk.md.
+
+# First, introduce the idea of probabilistic modeling. Make one slide where we model linear regression, give the mathematical formula with the Gaussian, and also the corresponding Stan code side by side
+
+# Second slide would be a slide where we go bayes. So what we do, we introduce the uncertainty for beta_0 and beta_one and combine and also sigma and combine these quantities to a parameter vector theta and then do the Bayesian model averaging
+
+# Introduce the NLPD As the measure for the performance given test data
+
+# Bayesian modeling is easy in principle. But practically this has been very hard. Doing Bayesian modeling has been hard. It requires to do integration. With the advent of MCMC methods where you don't need to do averaging you can draw samples from the posterior and also with these samples calculate the posterior predictive.
+
+# The idea is Stan Program + Data --> Samples from Posterior 
+
+# However, in Markov Chain Monte Carlo simulation things can go wrong. Therefore, very many technical tricks have been invented such as reparametrization and so on [list most of them]. "If your sampler has problems, your model has problems." Aki Vertacri
+
+# The New Twist Agents
+
+# CLI [Give a great idea of mini CLI where I can do a demo for example with Gemini or Claude Code]
+
+# Autosearcher [Include the figure of the Karpati github]
+
+# Here Prompting give both files.
+
+# Results 1 D regression [show figure 1]
+
+# Make a animatied slides with the stan code And the posterior predictive.
+
+# Show football example
+
+# Further examples in the paper give reference to the paper.
+
+
+
+
+
