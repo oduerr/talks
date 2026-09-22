@@ -1,0 +1,16 @@
+# Notebook + scripts for the TIDIT Bayes talk.  pip install -r requirements.txt
+numpy
+matplotlib
+scipy
+statsmodels
+numpyro            # pulls in jax (CPU)
+jupyter
+ipykernel
+ipywidgets
+nbformat
+nbconvert
+
+# optional — only for fit_stan.py (Stan cross-check); also needs CmdStan installed
+# cmdstanpy
+# optional — only if you want to re-run the PyMC comparison from the CLAUDE.md table
+# pymc

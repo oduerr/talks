@@ -71,3 +71,10 @@ src/slidev/2026_skills/slidev/vercel.json
 # Shared Slidev toolchain (one install for all talks)
 node_modules/
 package-lock.json
+
+# Python / Jupyter scratch
+__pycache__/
+.ipynb_checkpoints/
+
+# CmdStan compiles model.stan to a platform-specific binary next to it
+src/slidev/2026_bayes_tidit/model

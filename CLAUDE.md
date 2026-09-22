@@ -59,8 +59,11 @@ There are three presentation stacks in use:
 ```
 src/
 ├── slidev/
-│   ├── 2026_autostan/  # Current talk: "AutoStan: Autonomous Bayesian Model
-│   │                   #   Improvement via Predictive Feedback" (Slidev)
+│   ├── 2026_autostan/  # "AutoStan: Autonomous Bayesian Model Improvement
+│   │                   #   via Predictive Feedback" (Slidev)
+│   ├── 2026_bayes_tidit/  # Current talk: "Bayesian Statistics: Running the Model
+│   │                   #   Backwards" — Slidev deck + live notebook. Internal (TIDIT
+│   │                   #   retreat), not published to docs/. Has its own CLAUDE.md
 │   └── 2026_skills/    # "CLI Agents, Skills & the Return of the Shell" (Marp)
 └── quarto/
     ├── 2025_agents/    # "Groking Agents" (Quarto/Reveal.js)
