@@ -76,5 +76,11 @@ package-lock.json
 __pycache__/
 .ipynb_checkpoints/
 
+# uv-managed Python envs, one per talk folder. uv.lock IS committed (that is
+# the point of it); the venv itself and its cache are local and regenerated
+# with `uv sync`.
+.venv/
+.uv-cache/
+
 # CmdStan compiles model.stan to a platform-specific binary next to it
 src/slidev/2026_bayes_tidit/model

@@ -67,28 +67,35 @@ Key decisions and why:
 | `build_notebook.py` | generated the notebook. **If the .ipynb has been edited by hand, do not re-run this — it overwrites.** Treat the .ipynb as the source of truth from now on |
 | `components/PriorExplorer.vue` | in-browser prior-predictive explorer with sliders and a small Metropolis sampler. Backup slide 11, in case the notebook misbehaves |
 | `make_figs.py` | static figures in `imgs/` (data, OLS fit, prior predictive, ...). Not referenced by the current deck; kept as fallback |
-| `fit_stan.py`, `model.stan` | the same model in Stan, used as an independent cross-check of the numbers. Needs `cmdstanpy` + CmdStan. The compiled binary `model` is gitignored |
-| `requirements.txt` | Python deps for the notebook and scripts |
+| `fit_stan.py`, `model.stan` | the same model in Stan, used as an independent cross-check of the numbers. Needs the `crosscheck` extra (`cmdstanpy`, `pymc`) + CmdStan installed separately. The compiled binary `model` is gitignored |
+| `pyproject.toml`, `uv.lock` | Python deps, managed with **uv**. `uv.lock` is committed for reproducibility; `.venv/` is not |
+| `README.md` | install + run instructions — the short version of this section |
 
 ## Running things
 
 All commands from this folder. Slidev comes from the root `package.json`
-(`npm install` once at the repo root, never here).
+(`npm install` once at the repo root, never here). Python is managed with
+**uv** — `uv sync` creates `.venv/` from `pyproject.toml` + `uv.lock`; never
+`pip install` into a shared/global env for this talk. See `README.md` for
+the install walkthrough.
 
 ```
 npx slidev bayes_tidit.md                        # dev server, localhost:3030
 npx slidev bayes_tidit.md --remote --port 3030   # also on the LAN / Tailscale; presenter mode is then open to anyone on the network
 npx slidev build bayes_tidit.md --base /talks/bayes_tidit/ --out ../../../docs/bayes_tidit   # only if this ever goes public
 
-pip install -r requirements.txt
-jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb   # re-execute, checks every cell runs in order
-python make_figs.py                              # regenerate imgs/
-python fit_stan.py                               # Stan cross-check (optional)
+uv sync                                           # base deps: numpy, numpyro, statsmodels, jupyter, ...
+uv sync --extra crosscheck                        # + cmdstanpy, pymc — only for fit_stan.py / the PyMC comparison
+uv run jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb   # re-execute, checks every cell runs in order
+uv run python make_figs.py                        # regenerate imgs/
+uv run python fit_stan.py                          # Stan cross-check (needs the crosscheck extra + CmdStan)
+uv add <package>                                   # add a dependency — updates pyproject.toml + uv.lock together
 ```
 
-The notebook kernel is named `miniconda` / "Python (miniconda)" on the Mac
-mini. On another machine, register whatever env has the requirements:
-`python -m ipykernel install --user --name <name>` and pick it in VS Code.
+The notebook kernel is named `bayes-tidit` / "Python (bayes-tidit)", pointed
+at this folder's `.venv`. Register it once per machine:
+`uv run python -m ipykernel install --user --name bayes-tidit --display-name "Python (bayes-tidit)"`,
+then pick it in VS Code.
 
 ## Verified numbers (do not change slides without re-verifying)
 
@@ -127,10 +134,16 @@ patients below zero. Tightened priors → 57 … 230 mmHg, ~0 % below zero.
 - Slidev counts of slides via `noteHTML:` in the bundle are unreliable. Count
   separators in the markdown, merging `layout:` frontmatter blocks into the
   slide that follows.
-- Headless render checks work: `playwright` is installed in miniconda with
-  chromium. `http://localhost:3030/<n>?clicks=99` shows slide *n* fully
-  revealed; measure `.slidev-page-<n> .slidev-layout` `scrollHeight` vs
-  `clientHeight` for overflow (should be 552/552).
+- Headless render checks work: `playwright` (with chromium) can be added to
+  this project with `uv add --dev playwright && uv run playwright install
+  chromium` if needed again. `http://localhost:3030/<n>?clicks=99` shows
+  slide *n* fully revealed; measure `.slidev-page-<n> .slidev-layout`
+  `scrollHeight` vs `clientHeight` for overflow (should be 552/552).
+- All Python in this repo is standardized on **uv**, per-talk (each talk
+  folder with Python gets its own `pyproject.toml` + `uv.lock`, not a shared
+  env). This talk migrated off a shared miniconda install; if you find a
+  command anywhere still saying `~/miniconda3/bin/python` or `pip install`,
+  it is stale — use `uv run` / `uv sync` instead.
 
 ## Status
 

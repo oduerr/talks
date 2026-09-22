@@ -17,6 +17,20 @@ Do **not** add a `package.json` or run `npm install` inside a talk folder.
 a small `node_modules/.slidev` scratch folder in the talk directory; that is
 covered by the same rule.
 
+**Python is managed with [uv](https://docs.astral.sh/uv/), one project per talk
+folder.** A talk that needs Python gets its own `pyproject.toml` + `uv.lock`
+inside that talk's folder (e.g. `src/slidev/2026_bayes_tidit/`), not a shared
+interpreter and not a repo-root Python project — talks have unrelated
+dependencies (one needs `numpyro`/`jax`, another just `numpy`/`matplotlib`).
+Install with `uv sync` from inside the talk folder; run scripts with
+`uv run python <script>.py`; add a dependency with `uv add <package>`
+(updates `pyproject.toml` and `uv.lock` together — never edit `uv.lock` by
+hand or reach for `pip install`). `.venv/` is gitignored, `uv.lock` is
+committed. See the talk's own `CLAUDE.md`/`README.md` for its specific
+commands and, where present, an optional dependency group for scripts most
+people won't run (e.g. a Stan cross-check needing CmdStan installed
+separately).
+
 ## Presentation Technologies
 
 There are three presentation stacks in use:
