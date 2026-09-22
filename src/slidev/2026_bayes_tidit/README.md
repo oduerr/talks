@@ -53,11 +53,27 @@ knowing.
 For the live part of the talk (minutes 3–20), open `bayes_workflow.ipynb` in
 VS Code with the `bayes-tidit` kernel selected, alongside the slides.
 
+## Editing the notebook
+
+The notebook's source of truth is **`bayes_workflow.py`**, plain Python in
+[jupytext](https://jupytext.readthedocs.io/) `py:percent` format (`# %%` /
+`# %% [markdown]` cells) — diffable, reviewable, no JSON. It is paired with
+`bayes_workflow.ipynb`; edit either one:
+
+```bash
+# edited bayes_workflow.py -> bring the .ipynb up to date
+uv run jupytext --sync bayes_workflow.ipynb
+
+# edited bayes_workflow.ipynb in Jupyter/VS Code and saved -> bayes_workflow.py
+# updates automatically (jupytext is paired via the notebook's metadata)
+
+# re-run the whole notebook end to end, checks every cell in order, refreshes all outputs
+uv run jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb
+```
+
 ## Everyday commands
 
 ```bash
-uv run jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb
-                                     # re-run the whole notebook, checks every cell in order
 uv run python make_figs.py          # regenerate the static figures in imgs/
 uv sync --extra crosscheck && uv run python fit_stan.py   # Stan cross-check
 uv add <package>                    # add a new dependency (updates pyproject.toml + uv.lock)

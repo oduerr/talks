@@ -63,8 +63,8 @@ Key decisions and why:
 | file | role |
 |---|---|
 | `bayes_tidit.md` | the Slidev deck, 11 slides (9 for Part 1, a Part-2 divider, 2 backup) |
-| `bayes_workflow.ipynb` | the live notebook for min 3–20. **Executed, outputs saved.** This is the artifact Oliver presents from |
-| `build_notebook.py` | generated the notebook. **If the .ipynb has been edited by hand, do not re-run this — it overwrites.** Treat the .ipynb as the source of truth from now on |
+| `bayes_workflow.py` | the notebook's **source of truth** — plain Python, `jupytext` `py:percent` format, `# %%` cells and `# %% [markdown]` for prose. Diffable, so edit this, not the JSON |
+| `bayes_workflow.ipynb` | paired with `bayes_workflow.py` via jupytext (see its header). The live notebook for min 3–20, **executed with outputs saved** — this is the artifact Oliver presents from. Regenerable from the `.py` at any time |
 | `components/PriorExplorer.vue` | in-browser prior-predictive explorer with sliders and a small Metropolis sampler. Backup slide 11, in case the notebook misbehaves |
 | `make_figs.py` | static figures in `imgs/` (data, OLS fit, prior predictive, ...). Not referenced by the current deck; kept as fallback |
 | `fit_stan.py`, `model.stan` | the same model in Stan, used as an independent cross-check of the numbers. Needs the `crosscheck` extra (`cmdstanpy`, `pymc`) + CmdStan installed separately. The compiled binary `model` is gitignored |
@@ -86,7 +86,10 @@ npx slidev build bayes_tidit.md --base /talks/bayes_tidit/ --out ../../../docs/b
 
 uv sync                                           # base deps: numpy, numpyro, statsmodels, jupyter, ...
 uv sync --extra crosscheck                        # + cmdstanpy, pymc — only for fit_stan.py / the PyMC comparison
-uv run jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb   # re-execute, checks every cell runs in order
+
+# the notebook workflow: bayes_workflow.py is the source, .ipynb is generated + executed
+uv run jupytext --sync bayes_workflow.ipynb       # after editing bayes_workflow.py: regenerate the .ipynb (keeps existing outputs for unchanged cells)
+uv run jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb   # re-execute, checks every cell runs in order, refreshes all outputs
 uv run python make_figs.py                        # regenerate imgs/
 uv run python fit_stan.py                          # Stan cross-check (needs the crosscheck extra + CmdStan)
 uv add <package>                                   # add a dependency — updates pyproject.toml + uv.lock together
@@ -119,6 +122,13 @@ patients below zero. Tightened priors → 57 … 230 mmHg, ~0 % below zero.
 
 ## Gotchas that cost real time
 
+- **The notebook is authored as `.py`, not edited as `.ipynb` JSON.**
+  `bayes_workflow.py` (jupytext `py:percent`) is the source; the `.ipynb` is
+  paired to it and regenerated + executed from it. Edit the `.py`, then
+  `uv run jupytext --sync bayes_workflow.ipynb` and re-execute. Editing the
+  `.ipynb` directly (in Jupyter/VS Code) is also fine — jupytext syncs
+  changes back to the `.py` on save, as long as the pairing header in the
+  `.ipynb`'s metadata survives. Don't hand-edit the `.ipynb`'s raw JSON.
 - **UnoCSS attributify hijacks SVG paint attributes.** In a Slidev deck or Vue
   component, `stroke="#..."`, `stroke-opacity="0.45"`, `fill=`, `opacity=` on
   SVG elements get rewritten into utilities — `0.45` is read as 0.45 %, so
