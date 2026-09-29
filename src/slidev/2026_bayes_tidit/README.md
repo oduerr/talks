@@ -58,18 +58,39 @@ VS Code with the `bayes-tidit` kernel selected, alongside the slides.
 The notebook's source of truth is **`bayes_workflow.py`**, plain Python in
 [jupytext](https://jupytext.readthedocs.io/) `py:percent` format (`# %%` /
 `# %% [markdown]` cells) — diffable, reviewable, no JSON. It is paired with
-`bayes_workflow.ipynb`; edit either one:
+`bayes_workflow.ipynb`. Edit either one, then sync. The **same command works
+in both directions**: jupytext copies from whichever file was saved more
+recently into the other one.
 
 ```bash
-# edited bayes_workflow.py -> bring the .ipynb up to date
+# edited bayes_workflow.py            -> updates the .ipynb (keeps outputs of unchanged cells)
+# edited bayes_workflow.ipynb + saved -> updates the .py
 uv run jupytext --sync bayes_workflow.ipynb
-
-# edited bayes_workflow.ipynb in Jupyter/VS Code and saved -> bayes_workflow.py
-# updates automatically (jupytext is paired via the notebook's metadata)
 
 # re-run the whole notebook end to end, checks every cell in order, refreshes all outputs
 uv run jupyter nbconvert --to notebook --execute --inplace bayes_workflow.ipynb
 ```
+
+Remember:
+
+- **The sync is one-shot, not a watcher.** Each run compares the two files
+  once, copies in the newer-to-older direction, and exits. Run it again after
+  every round of edits. Nothing syncs automatically in VS Code (the automatic
+  sync-on-save only exists as a JupyterLab extension, which is not set up
+  here).
+- **Save the notebook before syncing, and sync before touching the other
+  file.** The direction is decided by modification time only. If you edit the
+  `.ipynb` in VS Code, forget to sync, and then edit the `.py`, the next sync
+  overwrites your notebook changes.
+- **Keep the kernel named `bayes-tidit`.** If you pick the bare `.venv`
+  interpreter in VS Code's kernel picker instead of "Python (bayes-tidit)",
+  the notebook header changes to `name: python3` and the sync carries that
+  into the `.py`. It runs fine interactively (same interpreter), but the
+  `nbconvert --execute` command above may then resolve `python3` to a
+  different Python without numpyro. Re-select "Python (bayes-tidit)" and
+  sync again.
+- After a sync, `git diff bayes_workflow.py` is the easiest way to see what
+  actually changed.
 
 ## Everyday commands
 

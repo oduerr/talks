@@ -1,0 +1,23 @@
+
+# Audience / Background: The talk will be given in a retreat for the TIDIT Group. We have people from the DS Group they are CS and other people from the PAIR Group. 
+I want to show the idea of Bayesian Statistic. I want to start with 
+
+# 
+
+# Classical Statistic
+- Example of SBP north american woman (show data)
+- Assume that that on average a linear relation holds
+- Show slide with python code together with Conf Int and results
+
+
+# Bayesian Statistic
+- Before we look at the real data we generate some data how it could look like
+- a ~ rnorm(1,5) we think that SBP goes up with age but ot 100% sure
+- b ~ rnorm(100,50) A newborn should have some SPD
+- sigma ~ rnorm(5, 100) There should spread in the data
+- Create data which is drawn from that (this is prior predictive)
+- y = rnorm(a*x+b, sigma)
+
+# Condition on the observed data
+
+

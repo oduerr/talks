@@ -18,7 +18,7 @@ lineNumbers: false
 
 <br>
 
-Oliver Dürr — TIDIT Retreat
+Oliver Dürr — TIDIT Retreat (24 Sep 2026)
 
 <!--
 Two parts. First 30 minutes: one example, start to finish, most of it live.
@@ -54,12 +54,17 @@ research part.
 </svg>
 
 <div v-click class="mt-4 text-center">
-Plan for today: write the forward pass in plain numpy — then find out what it takes to run it backwards.
+Plan for today: 
+1. Tell data generating story (forward pass in plain numpy) 
+2. Use the computer to run it backwards.
 </div>
 
 <!--
-Everything in this talk is this picture. Forward is easy: you all do it, it is
-called simulation. Backward is what statistics is. The Bayesian claim is that
+Everything in this talk is this picture. 
+
+Forward is easy: You generate data. People call this the "tell the data generating story". You use tools from probability theory to model your uncertainty
+
+Backward is what statistics is. The Bayesian claim is that
 the backward pass should be *the same program*, run in the other direction.
 -->
 
@@ -67,22 +72,33 @@ the backward pass should be *the same program*, run in the other direction.
 
 # One example, all the way through
 
-**33 North American women.** Two numbers each: age, and systolic blood pressure.
+**33 North American women.** Two numbers each: age and systolic blood pressure. We will **not look at the blood pressures yet**.
+
+<div class="mt-3 mb-4 px-4 py-2 bg-amber-50 rounded [&>p]:my-0">
+
+**The Bayesian tool:** probability = **degree of belief**¹. Anything we are unsure about can get a probability: the slope, a hypothesis, the probability that Trump takes a third term.
+
+</div>
 
 <v-clicks>
 
-- We will **not look at the blood pressures yet**
-- Before looking, what do we believe?
-  - blood pressure rises with age — but how fast?
-  - a newborn already has *some* blood pressure
-  - not everyone of the same age has the same pressure
-- Those three sentences are the model. Let us write them down.
+- Before looking at the data, what do we believe?
+  - blood pressure rises **linearly** with age (our assumption) — but how fast? <span class="guess">Any idea?</span>
+  - a newborn already has *some* blood pressure. <span class="guess">Any idea?</span>
+  - not everyone of the same age has the same pressure. <span class="guess">How much ±? Any idea?</span>
+- Then: write down how a random woman of a given age gets her blood pressure
 
 </v-clicks>
 
-<div v-click class="mt-8 p-3 border-l-4 border-blue-700 bg-blue-50 text-sm">
+<div v-click class="mt-3 px-3 py-2 border-l-4 border-blue-700 bg-blue-50 text-sm">
 
-→ **notebook** &nbsp; 1. the story, in numpy &nbsp;·&nbsp; 2. run it 200 times &nbsp;·&nbsp; 3. look at the data &nbsp;·&nbsp; 4. run it backwards
+→ <a href="https://github.com/oduerr/talks/blob/main/src/slidev/2026_bayes_tidit/bayes_workflow.ipynb" target="_blank" class="font-bold">notebook</a> &nbsp; 1. the story, in numpy &nbsp;·&nbsp; 2. run it 200 times &nbsp;·&nbsp; 3. look at the data &nbsp;·&nbsp; 4. run it backwards
+
+</div>
+
+<div class="footnotes">
+
+¹ Coherent degrees of belief satisfy Kolmogorov's axioms: probabilities in the full mathematical sense (Cox).
 
 </div>
 
@@ -92,40 +108,48 @@ Whatever they say goes into the notebook. Then switch.
 
 The point of not showing the scatter plot: the workflow says you write down
 your beliefs before you look. Make them experience that, do not just say it.
+
+The amber box is the licence for everything that follows. Without it, "what
+do we believe about the slope?" is not a statistical question. A frequency
+probability needs repetitions. A degree of belief needs neither repetitions
+nor a "true value" behind it: there is no true probability that Trump takes
+a third term, only what each of us believes given what we know.
+It comes back on the credible-interval slide: "the slope is in here with 95%
+probability" is a statement about our belief, which this box allows.
+
+Footnote fine print, if a statistician asks: Cox and the Dutch-book argument
+give finite additivity. Countable additivity, as in Kolmogorov, is the usual
+extra assumption.
 -->
 
 ---
 
-# Why numpy cannot run backwards
+# Why numpy cannot run backwards (technical detail)
 
 <div class="text-sm">
 
 | forward only | both directions |
 |---|---|
-| `a = np.random.normal(1, 0.4)` | `a = numpyro.sample("a", dist.Normal(1, 0.4))` |
-| `b = np.random.normal(90, 15)` | `b = numpyro.sample("b", dist.Normal(90, 15))` |
-| `sigma = abs(np.random.normal(0, 20))` | `sigma = numpyro.sample("sigma", dist.HalfNormal(20))` |
+| <code>a = np.random.normal(<span class="guess">1, 0.4</span>)</code> | <code>a = numpyro.sample("a", dist.Normal(<span class="guess">1, 0.4</span>))</code> |
+| <code>b = np.random.normal(<span class="guess">100, 15</span>)</code> | <code>b = numpyro.sample("b", dist.Normal(<span class="guess">100, 15</span>))</code> |
+| <code>sigma = abs(np.random.normal(0, <span class="guess">20</span>))</code> | <code>sigma = numpyro.sample("sigma", dist.HalfNormal(<span class="guess">20</span>))</code> |
 | `sbp = np.random.normal(b + a*age, sigma)` | `numpyro.sample("sbp", dist.Normal(b + a*age, sigma), obs=sbp)` |
 
 </div>
 
-<v-clicks class="text-sm mt-2">
+- Numpy just stores the draw number not where it came from. So it cannot run backwards.
 
-- **numpy forgets.** `np.random.normal(1, 0.4)` returns `0.87` — that it *came from* N(1, 0.4) is gone. The name in `sample("a", …)` is how the program remembers its own structure.
-- **numpy can only draw, not evaluate.** It samples from N(1, 0.4) but cannot say how probable `0.87` was. `dist.Normal` is a sampler *and* a density — the backward pass needs the density.
 - **`obs=` is the switch.** Same function: `sbp=None` runs forward, `sbp=data` runs backward.
 
-</v-clicks>
-
-<!--
-This is the conceptual centre of the talk. A probabilistic programming
-language is a language whose programs remember what they did and can be
-evaluated, not just run. That is all it is.
--->
+<div class="text-xs opacity-60 mt-2"><span class="guess">orange</span> = the numbers the room guessed on the previous slide</div>
 
 ---
 
 # Same problem, the classical way
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
 
 ```python
 import statsmodels.api as sm
@@ -134,23 +158,49 @@ print(fit.summary())
 ```
 
 ```txt
-                 coef    std err          t      P>|t|      [0.025      0.975]
-const          87.6714     10.076      8.701      0.000      67.120     108.223
-age             1.1050      0.206      5.364      0.000       0.685       1.525
+              coef  std err    t   P>|t|   [0.025  0.975]
+const       87.671   10.076 8.701  0.000    67.120 108.223
+age          1.105    0.206 5.364  0.000     0.685   1.525
 ```
+
+</div>
+
+<div>
+
+```r
+fit <- lm(sbp ~ age)
+summary(fit)
+```
+
+```txt
+            Estimate Std.Error t value Pr(>|t|)
+(Intercept)   87.671    10.076   8.701  7.97e-10
+age            1.105     0.206   5.364  7.56e-06
+
+Residual standard error: 19.28,  R² 0.481
+```
+
+</div>
+
+</div>
+
+<div class="text-xs opacity-50 mt-1">Same fit, same numbers — Python and R agree to three decimals.</div>
 
 <v-click>
 
 | | slope | 95% interval |
 |---|---|---|
-| **Bayes** — what we just did | 1.06 | \[0.74, 1.38\] |
+| **Bayes** — what we just did | 1.02 | \[0.69, 1.37\] |
 | **least squares** | 1.11 | \[0.69, 1.53\] |
 
 </v-click>
 
 <v-click>
 
-Same answer. The Bayesian interval is ~24% narrower — *because we put in a prior*. With a flat prior it becomes \[0.69, 1.52\] — the classical interval, recovered.
+Same answer in principle. 
+
+Fineprint:
+The Bayesian (credible) interval is ~19% narrower compared to the classical (frequentist) interval. This is because we put in a prior. With a flat prior it becomes \[0.69, 1.52\]  the classical interval, recovered.
 
 </v-click>
 
@@ -162,115 +212,175 @@ real prior knowledge it uses it, and either way you can see what you assumed.
 
 ---
 
-# So what did we gain? The interval *means* something
+# The role of the prior
 
-<div class="grid grid-cols-2 gap-8 mt-4">
+<div class="grid grid-cols-[1fr_1fr] gap-8 mt-10 items-center">
 
-<div>
+<div class="[&_li]:leading-snug">
 
-**Confidence interval** [0.69, 1.53]
+<div v-click="1" class="mb-4">
 
-> If we repeated this study many times, 95% of the intervals built this way would contain the true slope.
-
-A statement about **the procedure**. Says nothing about *this* interval.
+- **Little data, real knowledge: put it in.** Covid, early 2020: few data points, but for an airborne disease we know $t_0$ is a few days (not hours or months).
 
 </div>
 
-<div v-click>
+<div v-click="2" class="mb-4">
 
-**Credible interval** [0.74, 1.38]
+- **Much data: the prior washes out.** Bayes reproduces the classical result (if you don't shoot yourself in the foot)¹.
 
-> Given the data we saw, the slope is in here with 95% probability.
+</div>
 
-A statement about **the parameter**. The sentence everyone *wants* to say.
+<div v-click="3">
+
+- **A spectrum, not a switch.** Informative → weakly informative → "non-informative" (Jeffreys, reference priors).
 
 </div>
 
 </div>
 
-<div v-click class="mt-8 text-center">
+<div v-click="1">
 
-And we may now write things like &nbsp; $P(a > 0 \mid \text{data}) > 0.9999$ &nbsp; — a probability *about a parameter*.
+<img src="./imgs/covid_dehning2020.png" class="w-full" />
+
+<div class="text-xs opacity-60 mt-1">Change-point model: <a href="https://arxiv.org/abs/2004.01105" target="_blank">Dehning, Priesemann et al., Science 2020</a></div>
 
 </div>
 
-<!--
-The frequentist statement is correct and almost nobody in practice says it.
-The Bayesian statement is what people actually mean when they read a CI. That
-gap is what you pay a prior to close.
--->
+</div>
 
----
+<div v-click="4" class="mt-10 text-center">
 
-# Two ways of thinking
+**Domain knowledge in the prior is a bonus. A weak prior costs you nothing.**
 
-| | frequentist | Bayesian |
-|---|---|---|
-| parameters | fixed, unknown | uncertain → a distribution |
-| data | random | fixed — you observed it |
-| the answer | an estimate + a procedure | a distribution $p(\theta \mid \text{data})$ |
-| assumptions | in the procedure, implicit | in the prior, written down |
-| the workflow | fit | simulate → check → condition → check |
-| this example | same numbers | same numbers |
+</div>
 
-<div v-click class="mt-6 text-center">
+<div class="footnotes">
 
-For a linear regression on 33 points, the choice does not matter. **So when does it?**
+¹ For regular models with a fixed number of parameters (Bernstein–von Mises), and only if the prior gives the truth some mass.
 
 </div>
 
 <!--
-Be fair here. On this problem both are fine and both are right. The
-difference is not the answer — it is what you may say about it, and, next
-slide, what happens when the model gets big.
+The corona example: serial interval, incubation time and doubling time were
+all put in as priors in the early models, because the case data alone could
+not identify them. That is prior knowledge doing real work.
+The chart is the Göttingen model (Dehning, Priesemann et al., Science 2020):
+an SIR model with change points, fitted in PyMC3. Priors on the spreading
+rate, the recovery rate, the reporting delay, and on when each intervention
+took effect. With a few weeks of noisy counts, the priors are what made the
+three scenarios (8, 16, 22 March) distinguishable at all.
+The last line is the message: a prior is not optional, but domain knowledge
+in it is. With a weak prior you get the classical answer back.
 -->
 
 ---
 
-# When the model is a neural network
+# When classical, when Bayesian?
 
 <div class="grid grid-cols-2 gap-8 mt-2">
 
 <div>
 
-**The recipe does not change.**
+**Classical Statistics**
 
-```python
-def model(x, y=None):
-    w = sample("w", Normal(0, 1))    # millions of them
-    f = neural_net(x, w)
-    sample("y", Normal(f, sigma), obs=y)
-```
-
-Priors, likelihood, `obs=`. Same four lines. **The forward pass is deep learning.**
+- you pick a standard model that (roughly) fits your data
+    - linear regression, GLMs, logistic regression (if the classes overlap³)
+- fast, well understood, no computational issues, standard errors for free¹
+- it scales to neural networks as maximum likelihood, but the uncertainty recipe does not²
 
 </div>
 
 <div v-click>
 
-**The classical uncertainty machinery does.**
+**Bayesian Statistics**
 
-- standard errors come from the curvature of the likelihood at the optimum
-- for a million-parameter, non-convex, non-identifiable model that curvature is meaningless
-- a confidence interval for weight #3,471,022 is not a thing
-
-Point estimates scale. *Uncertainty* does not.
-
-</div>
+- you define the model (the DGP) yourself. Novel complex models are possible
+    - hierarchical, nonlinear, ODEs, latent variables
+    - logistic regression always, with a proper prior³
+- little data and real prior knowledge
+- you need uncertainty, for the parameters or anything derived from them
 
 </div>
 
-<div v-click class="mt-6 p-3 border-l-4 border-red-500 bg-red-50">
+</div>
 
-The Bayesian recipe still makes sense — but the backward pass becomes **computationally hard**. Making it tractable is Part 2.
+<div class="footnotes">
+
+¹ Asymptotic (Wald) intervals from the Fisher information. Approximate for small samples.<br>
+² The curvature of the likelihood at the optimum is meaningless for an over-parametrised net. Workarounds exist (deep ensembles, conformal prediction). Part 2.<br>
+³ Separation: if a predictor splits 0s and 1s perfectly, the logistic MLE does not exist. Any proper prior fixes it; the classical fix (Firth) is the Jeffreys prior.
 
 </div>
 
 <!--
-This is the bridge. Careful with the claim: deep learning IS frequentist
-statistics, it is maximum likelihood, and it scales beautifully. What does
-not scale is the uncertainty. That is exactly the gap a Bayesian neural
-network fills — and exactly where it gets hard.
+Both groups are in the room, so be fair to both.
+
+To the PAIR side: on their home turf, a GLM on a few hundred rows, classical
+is hard to beat. No sampler, no convergence diagnostics, standard errors for
+free. Footnote 1 is the fine print: those errors are asymptotic.
+
+To the DS side: deep learning IS classical statistics. It is maximum
+likelihood, and it scales beautifully. What does not scale is the uncertainty
+recipe, the curvature at the optimum. Footnote 2 pre-empts "but ensembles,
+but conformal": yes, they exist, they are not parameter-level uncertainty.
+That gap is Part 2.
+
+The Bayesian pitch is not better numbers. Slide 5 showed the same numbers.
+The pitch is: you write the data-generating process yourself, whatever it
+is, and inference comes for free. Then any quantity you can compute from the
+parameters has a posterior. P(a > 0 | data) was one line. Hierarchical
+models are the everyday case where this pays off.
+
+Little data and real prior knowledge is the corona example from the previous
+slide. Do not repeat it, just point back.
+
+Footnote 3, if asked, the demo (10 points, all 0 below x = 5.5, all 1 above):
+R glm: slope 44.7, SE 61,172, p = 0.999, "did not converge". The strongest
+possible effect reported as not significant. NumPyro with N(0, 2.5) priors on
+standardised x: slope 3.9, 95% [1.3, 7.4], P(slope > 0) = 0.9995. Honest
+caveat: here the prior does not wash out, the upper end comes from the prior
+scale. With a flat prior the Bayesian posterior is improper too.
+-->
+
+---
+
+# Bayes in practice
+
+<div class="grid grid-cols-2 gap-8 mt-2">
+
+<div>
+
+**Where it hurts**
+
+- sampling can be hard: babysit chains, reparametrisation tricks and other know-how → AutoStan
+- cost: cheap (2026 on a Mac 😉) at problems where you can define the DGP; unfeasible for Neural Network Size Models (see later)
+
+</div>
+
+<div v-click>
+
+**Where it fits**
+
+- scientists think generatively anyway: say how the data came about, then run it backwards (for free)
+- StanCon 2026: anthropology, psychology, economics, music theory, …
+
+</div>
+
+</div>
+
+<div v-click class="mt-6 flex flex-col items-center">
+<img src="./imgs/feynman_blackboard.jpg" class="w-120 rounded shadow" />
+<div class="text-xs opacity-60 mt-1">Feynman's blackboard at his death, 1988. Courtesy of the Archives, California Institute of Technology.</div>
+
+</div>
+
+<!--
+The cost bullet is the honest bridge to Part 2: for this model the posterior
+takes a second; for a network it is the whole research problem.
+The blackboard is the punchline of Part 1: if you can write down how the
+data are created, you understand the problem, and the Bayesian machinery
+runs that creation backwards for free. The quote was in the top-left corner
+of Feynman's Caltech blackboard when he died in February 1988.
 -->
 
 ---
@@ -282,7 +392,170 @@ class: text-center
 
 ## Bayesian neural networks — making the backward pass tractable
 
-<div class="mt-6 text-sm opacity-60">(existing slides)</div>
+---
+
+# The elephant in the room
+
+<div class="grid grid-cols-[2fr_3fr] gap-8 mt-12 items-center">
+
+<div>
+
+- Standard deep learning is trained by **maximum likelihood**
+- i.e. classical statistical training, but **without confidence intervals**
+- No elephant in the prediction, and no sign of doubt either
+
+</div>
+
+<div>
+
+<img src="./imgs/p2_elephant.jpg" class="w-full rounded shadow" />
+
+<div class="text-xs opacity-60 mt-2">The image is too far away from the training data. Rosenfeld et al., <i>The Elephant in the Room</i>, NeurIPS 2018 Workshop on Causal Learning.</div>
+
+</div>
+
+</div>
+
+---
+
+# Aleatoric vs. epistemic uncertainty
+
+<div class="grid grid-cols-[1fr_1fr] gap-8 mt-2 items-center">
+
+<div class="relative">
+
+<img src="./imgs/p2_aleatoric_epistemic.png" class="w-full" />
+
+<div class="absolute text-xs font-bold px-1 rounded" style="left:44%; top:23%; color:#1d4ed8">← much spread in the data:<br>aleatoric</div>
+<div class="absolute text-xs font-bold px-1 rounded" style="left:70%; top:50%; color:#c0392b">↑ no epistemic<br>uncertainty<br>in standard DL</div>
+
+</div>
+
+<div>
+
+- **Aleatoric**: noise in the data. It stays, even for $N \to \infty$. From *alea*, the die.
+- **Epistemic**: the uncertainty when leaving known ground. It shrinks with more data.
+- Standard deep learning models the first, but not the second.
+
+</div>
+
+</div>
+
+<div class="mt-6 p-3 bg-blue-50 rounded text-center">
+
+Epistemic uncertainty = the uncertainty about the **weights** (parameter uncertainty). That is exactly what the Bayesian recipe provides.
+
+</div>
+
+---
+
+# Getting epistemic uncertainty in deep learning
+
+<div class="grid grid-cols-[1fr_2fr] gap-10 mt-10 items-center">
+
+<div class="flex flex-col gap-6 text-center">
+
+<div>
+<div class="text-5xl font-bold" style="color:#2d5986">&lt; 100</div>
+<div class="text-sm opacity-70">parameters in traditional statistics</div>
+</div>
+
+<div>
+<div class="text-5xl font-bold" style="color:#c0392b">10⁶ +</div>
+<div class="text-sm opacity-70">parameters where deep learning starts</div>
+</div>
+
+</div>
+
+<div>
+
+- **Classical:** confidence intervals need the Hessian of the loss. At this size, no way.
+- **Bayesian:** translates in principle, but
+  - sampling does not work out of the box
+  - the loss landscape is much rougher
+- We need **approximations**: variational inference, MC dropout, deep ensembles, Laplace, SG-MCMC, …
+
+<div class="mt-4 p-3 bg-blue-50 rounded">
+
+One line of research: **subspace inference**.
+
+</div>
+
+</div>
+
+</div>
+
+---
+
+# Subspace inference: the idea
+
+<div class="grid grid-cols-[4fr_4fr_3fr] gap-x-6 gap-y-4 mt-2">
+
+<div class="row-span-2 flex items-center">
+<img src="./imgs/p2_loss_landscape.jpg" class="w-full" />
+</div>
+
+<div>
+
+**Observation:** the loss minima of a neural network are connected.
+
+Instead of sampling in $\mathbb{R}^{10^6}$, construct a **low-dimensional manifold** and sample there.
+
+</div>
+
+<div class="text-center">
+<img src="./imgs/p2_defense_munich.jpg" class="w-full rounded shadow" />
+<div class="text-xs opacity-60 mt-1">Daniel's defense, 23 Sep, Munich</div>
+</div>
+
+<div class="col-span-2 text-sm">
+
+| | | |
+|---|---|---|
+| AISTATS 2024 | simple subspace | <a href="https://arxiv.org/abs/2401.12950" target="_blank">arXiv:2401.12950</a> |
+| AISTATS 2025 | advanced subspace | <a href="https://arxiv.org/abs/2503.03382" target="_blank">arXiv:2503.03382</a> |
+| NeurIPS 2026 (submitted) | LLMs (Qwen 8B), LoRA | <a href="https://arxiv.org/abs/2605.29580" target="_blank">arXiv:2605.29580</a> |
+
+</div>
+
+</div>
+
+---
+
+# Outlook: Bayes @ HTWG
+
+<div class="grid grid-cols-2 gap-6 mt-6">
+
+<div class="p-4 bg-gray-50 rounded">
+
+### Saentis
+<div class="text-sm opacity-60 mb-3">DFG-funded · just started</div>
+
+Self-driving ships, **3 PhD positions**. One in Bayesian statistics:
+
+- Bayesian deep learning models to locate other ships
+- other ships modelled the Bayesian way, to predict their course with uncertainty
+
+</div>
+
+<div class="p-4 bg-gray-50 rounded">
+
+### AGILE-VLA
+<div class="text-sm opacity-60 mb-3">BMFTR call, 2nd round · starts early 2027</div>
+
+Uncertainty-aware vision-language-action models, **5 PhD positions** (3 at HTWG). One in Bayesian statistics:
+
+- uncertainty-aware VLMs, e.g. with subspace inference
+- semantic uncertainty: over the whole sequence, not a single token
+
+</div>
+
+</div>
+
+<!--
+AGILE-VLA: second round of the BMFTR call, we are writing the subproject
+description (Teilvorhaben-Beschreibung) now.
+-->
 
 ---
 layout: center

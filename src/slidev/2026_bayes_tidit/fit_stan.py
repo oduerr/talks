@@ -30,7 +30,7 @@ parameters {
 }
 model {
   a ~ normal(1, 0.4);           // SBP rises with age, but we are not certain
-  b ~ normal(90, 15);           // a newborn has some blood pressure
+  b ~ normal(100, 15);           // a newborn has some blood pressure
   sigma ~ normal(0, 20);        // half-normal, sigma is positive
   y ~ normal(b + a * x, sigma); // <- the only line that mentions the data
 }

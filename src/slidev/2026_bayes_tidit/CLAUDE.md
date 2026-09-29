@@ -9,8 +9,10 @@ The repo-level CLAUDE.md covers the shared Slidev toolchain; this file covers th
   (computer scientists, think in code) and the PAIR group (applied statisticians,
   think in estimates and uncertainty). Neither side should feel talked down to.
 - **Length:** 40 minutes. Part 1 (~30 min) is this deck plus the notebook.
-  Part 2 (~10 min) is Oliver's existing BNN research slides, dropped in after
-  slide 9 ("Part 2" divider). Part 2 is not in this folder and not our concern.
+  Part 2 (~10 min) is Oliver's BNN research slides, after the "Part 2" divider
+  (slide 9). Ported on 2026-09-23 from `Outline.pptx` (kept in this folder as
+  the original): elephant in the room, aleatoric vs epistemic, why BNNs are
+  hard, subspace inference, outlook @ HTWG. Images are `imgs/p2_*`.
 - **One example carried all the way through:** systolic blood pressure vs. age,
   33 North American women. Data is from Sick & Dürr, *Probabilistic Deep
   Learning* (Manning), ch. 1. It contains a woman aged 9 — that is in the
@@ -42,7 +44,7 @@ Key decisions and why:
   remember what they did and can be evaluated, not just run. That is slide 4.
 - **The scatter plot stays hidden until the notebook's step 3.** The workflow
   says you write down beliefs before looking. Make the room experience that.
-- **Do not oversell "credible intervals are narrower."** Ours are ~24% narrower
+- **Do not oversell "credible intervals are narrower."** Ours are ~19% narrower
   *because the prior on the intercept is informative*. With a flat prior the
   intervals coincide (verified, table below). The honest point: weak prior →
   same answer as OLS; real prior knowledge → tighter, and you can see what you
@@ -62,10 +64,13 @@ Key decisions and why:
 
 | file | role |
 |---|---|
-| `bayes_tidit.md` | the Slidev deck, 11 slides (9 for Part 1, a Part-2 divider, 2 backup) |
+| `bayes_tidit.md` | the Slidev deck, 16 slides (8 for Part 1, a Part-2 divider, 5 for Part 2, 2 backup) |
+| `Outline.pptx` | original PowerPoint of Part 2. Source for slides 10–14; not used by the build |
+| `style.css` | global deck styles, auto-loaded by Slidev. Currently only the manual `.footnotes` block |
+| `global-bottom.vue` | slide-number overlay (`n / total`), auto-loaded by Slidev on every slide |
 | `bayes_workflow.py` | the notebook's **source of truth** — plain Python, `jupytext` `py:percent` format, `# %%` cells and `# %% [markdown]` for prose. Diffable, so edit this, not the JSON |
 | `bayes_workflow.ipynb` | paired with `bayes_workflow.py` via jupytext (see its header). The live notebook for min 3–20, **executed with outputs saved** — this is the artifact Oliver presents from. Regenerable from the `.py` at any time |
-| `components/PriorExplorer.vue` | in-browser prior-predictive explorer with sliders and a small Metropolis sampler. Backup slide 11, in case the notebook misbehaves |
+| `components/PriorExplorer.vue` | in-browser prior-predictive explorer with sliders and a small Metropolis sampler. Backup slide 16, in case the notebook misbehaves |
 | `make_figs.py` | static figures in `imgs/` (data, OLS fit, prior predictive, ...). Not referenced by the current deck; kept as fallback |
 | `fit_stan.py`, `model.stan` | the same model in Stan, used as an independent cross-check of the numbers. Needs the `crosscheck` extra (`cmdstanpy`, `pymc`) + CmdStan installed separately. The compiled binary `model` is gitignored |
 | `pyproject.toml`, `uv.lock` | Python deps, managed with **uv**. `uv.lock` is committed for reproducibility; `.venv/` is not |
@@ -102,15 +107,17 @@ then pick it in VS Code.
 
 ## Verified numbers (do not change slides without re-verifying)
 
-Priors: `a ~ N(1, 0.4)`, `b ~ N(90, 15)`, `sigma ~ HalfNormal(20)`.
+Priors: `a ~ N(1, 0.4)`, `b ~ N(100, 15)`, `sigma ~ HalfNormal(20)`.
+(Changed from `b ~ N(90, 15)` on 2026-09-22. The intercept prior sits above
+the OLS intercept of 87.7, so it pulls the slope down a little: 1.06 → 1.02.)
 
 | method | slope a | 95% interval |
 |---|---|---|
 | OLS (`statsmodels`) | 1.105 | [0.685, 1.525] |
-| NumPyro NUTS — the notebook, `PRNGKey(2)` | **1.06** | **[0.74, 1.38]** |
-| Stan NUTS (`fit_stan.py`) | 1.075 | [0.754, 1.399] |
-| PyMC NUTS | 1.078 | [0.748, 1.399] |
-| browser Metropolis (`PriorExplorer.vue`) | 1.083 | [0.769, 1.413] |
+| NumPyro NUTS — the notebook, `PRNGKey(2)` | **1.02** | **[0.69, 1.37]** |
+| Stan NUTS (`fit_stan.py`) — with the old `b ~ N(90, 15)`, not re-run | 1.075 | [0.754, 1.399] |
+| PyMC NUTS — old prior, not re-run | 1.078 | [0.748, 1.399] |
+| browser Metropolis (`PriorExplorer.vue`) — old prior, not re-run | 1.083 | [0.769, 1.413] |
 | NumPyro with flat priors | 1.097 | [0.685, 1.520] |
 
 OLS full table: intercept 87.671 (se 10.076), slope 1.105 (se 0.206), residual
@@ -118,7 +125,7 @@ sd 19.28, R² 0.481. Reproduces the R output in the book's source exactly.
 
 Prior predictive at the data level (mean curve + noise), 1–99 %:
 original priors `a~N(1,5), b~N(100,50)` → −490 … 810 mmHg, ~25 % of simulated
-patients below zero. Tightened priors → 57 … 230 mmHg, ~0 % below zero.
+patients below zero. Tightened priors `a~N(1,0.4), b~N(100,15)` → 65 … 238 mmHg, ~0 % below zero.
 
 ## Gotchas that cost real time
 
@@ -127,15 +134,27 @@ patients below zero. Tightened priors → 57 … 230 mmHg, ~0 % below zero.
   paired to it and regenerated + executed from it. Edit the `.py`, then
   `uv run jupytext --sync bayes_workflow.ipynb` and re-execute. Editing the
   `.ipynb` directly (in Jupyter/VS Code) is also fine — jupytext syncs
-  changes back to the `.py` on save, as long as the pairing header in the
-  `.ipynb`'s metadata survives. Don't hand-edit the `.ipynb`'s raw JSON.
+  changes back to the `.py` when you run `uv run jupytext --sync` again —
+  the sync is one-shot, newer file wins, nothing watches. See README.
+  Don't hand-edit the `.ipynb`'s raw JSON.
 - **UnoCSS attributify hijacks SVG paint attributes.** In a Slidev deck or Vue
   component, `stroke="#..."`, `stroke-opacity="0.45"`, `fill=`, `opacity=` on
   SVG elements get rewritten into utilities — `0.45` is read as 0.45 %, so
   things render invisibly. The build passes and nothing warns. **Put every
   paint property in `style="..."` / `:style`**, never in an attribute. Slide 2
   and `PriorExplorer.vue` both do this; keep it that way.
-- **Markdown tables eat `[0.74, 1.38]`** (link syntax). Escape: `\[0.74, 1.38\]`.
+- **Markdown tables eat `[0.69, 1.37]`** (link syntax). Escape: `\[0.69, 1.37\]`.
+- **A `---` separator must be followed by a blank line.** `---` directly
+  followed by `# Title` makes Slidev parse the whole slide as YAML frontmatter
+  (`# …` is a YAML comment). The slide renders blank, the build passes, nothing
+  warns. Check with `node -e "require('@slidev/parser').parse(...)"` or the
+  headless render.
+- **Markdown footnotes `[^1]` do not work in this deck.** `mdc: true` in the
+  headmatter lets the MDC/comark plugin grab `[^1]` as a span before
+  `markdown-it-footnote` sees it; the marker renders as `^1` and the definition
+  vanishes. Use unicode superscripts (¹ ² ³) in the text and a
+  `<div class="footnotes">…</div>` block at the end of the slide; `style.css`
+  pins it to the bottom in small type.
 - `numpyro.sample(...)` called bare, outside a function or handler, fails with
   an empty `AssertionError`. It needs `handlers.seed` or to live inside the
   model function. In the notebook it is always inside `model()`.
@@ -160,4 +179,4 @@ patients below zero. Tightened priors → 57 … 230 mmHg, ~0 % below zero.
 - Deck and notebook are complete for Part 1 and verified (every slide renders,
   no overflow, notebook executes end to end with zero warnings).
 - Not published to `docs/` — internal talk. Source is committed.
-- Open: nothing for Part 1. Part 2 slides are Oliver's, added after slide 9.
+- Open: nothing for Part 1. Part 2 is ported from `Outline.pptx` (slides 10–14).

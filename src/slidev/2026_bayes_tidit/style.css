@@ -1,0 +1,24 @@
+/* Manual footnotes: unicode superscripts in the text, this block at the end of
+   the slide. (markdown-it footnotes are broken by mdc: true, see CLAUDE.md.) */
+.slidev-layout .footnotes {
+  position: absolute;
+  left: 3.5rem;
+  right: 3.5rem;
+  bottom: 1.6rem;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  opacity: 0.7;
+  border-top: 1px solid currentColor;
+  padding-top: 0.3rem;
+}
+.slidev-layout .footnotes p {
+  margin: 0;
+}
+
+/* Orange = "the audience guesses this": the "Any idea?" prompts on slide 3
+   and the prior numbers they turn into on slide 4. Orange-700 keeps AA
+   contrast on white and on the table rows. */
+.guess {
+  color: #c2410c;
+  font-weight: 600;
+}

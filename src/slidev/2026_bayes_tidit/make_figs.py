@@ -130,10 +130,10 @@ lo, hi, neg = pp_stats(1, 5, 100, 50, 20)
 print(f"\nvague prior predictive: 1%..99% = {lo:.0f} .. {hi:.0f} mmHg, "
       f"P(SBP < 0) = {neg:.1%}")
 
-a2, b2, sig2 = prior_predictive(1, 0.4, 90, 15, 20)
+a2, b2, sig2 = prior_predictive(1, 0.4, 100, 15, 20)
 plot_prior(a2, b2, sig2,
-           "Prior predictive: a~N(1,0.4), b~N(90,15)  →  plausible",
+           "Prior predictive: a~N(1,0.4), b~N(100,15)  →  plausible",
            "04_prior_tight.png")
-lo2, hi2, neg2 = pp_stats(1, 0.4, 90, 15, 20)
+lo2, hi2, neg2 = pp_stats(1, 0.4, 100, 15, 20)
 print(f"tight prior predictive: 1%..99% = {lo2:.0f} .. {hi2:.0f} mmHg, "
       f"P(SBP < 0) = {neg2:.1%}")
