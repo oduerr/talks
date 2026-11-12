@@ -75,6 +75,9 @@ src/
 ├── slidev/
 │   ├── 2026_autostan/  # "AutoStan: Autonomous Bayesian Model Improvement
 │   │                   #   via Predictive Feedback" (Slidev)
+│   ├── 2026_ceilometer/ # "Ceilometer: Modell, ML-Schätzer und Kreuzkorrelation" (Slidev, German).
+│   │                   #   Export only: maintained in the private talks repo, copied and built
+│   │                   #   by its export_public.sh into here and docs/ceilometer
 │   ├── 2026_bayes_tidit/  # Current talk: "Bayesian Statistics: Running the Model
 │   │                   #   Backwards" — Slidev deck + live notebook. Internal (TIDIT
 │   │                   #   retreat), not published to docs/. Has its own CLAUDE.md

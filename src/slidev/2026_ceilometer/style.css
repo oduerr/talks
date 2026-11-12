@@ -1,0 +1,23 @@
+/* One takeaway style for every content slide: centred, bold, the lecture blue, always at the same
+   height (absolute, above the slide number). A takeaway inside a column uses `takeaway !static`.
+   Note: the theme's `.slidev-layout p` margins beat plain `mt-*` utilities on a <p>; use `!mt-*`. */
+.slidev-layout .takeaway {
+  position: absolute;
+  left: 3rem;
+  right: 3rem;
+  bottom: 4.5rem;
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: #0070c0;
+}
+
+
+/* ceilometer: cards, source line, number table (taken from ralf_ai) */
+.slidev-layout .card { border: 1px solid #cfd8e3; border-radius: 0.5rem; padding: 0.8rem 1rem; background: #fafcfe; }
+.slidev-layout .src { position: absolute; left: 3.5rem; right: 3.5rem; bottom: 1.6rem; font-size: 0.68rem; color: #777; line-height: 1.3; }
+.slidev-layout .takeaway p { margin: 0; }
+.slidev-layout .warn { border-left: 4px solid #b5523b; background: #fbf3f1; padding: 0.45rem 0.9rem; }
+.slidev-layout .ok { border-left: 4px solid #0070c0; background: #f3f6fa; padding: 0.45rem 0.9rem; }
