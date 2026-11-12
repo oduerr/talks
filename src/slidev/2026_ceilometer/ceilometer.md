@@ -1,5 +1,6 @@
 ---
 theme: default
+routerMode: hash
 title: "Ceilometer: Modell, ML-Schätzer und Kreuzkorrelation"
 info: |
   Oliver Dürr, November 2026. Zweite Fassung, nach meinen Notizen vom 10.11.2026
